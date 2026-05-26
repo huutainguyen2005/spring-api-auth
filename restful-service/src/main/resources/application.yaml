@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: restful-service
+  datasource:
+    # Connection URL for SQL Server using the Microsoft JDBC driver
+    url: jdbc:sqlserver://localhost:1433;databaseName=chinook;encrypt=false;
+    # Database username and password
+    username: sa
+    password: 123
+    # Use the Microsoft SQL Server JDBC driver
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    # Hibernate settings suitable for Microsoft SQL Server
+    hibernate:
+      naming:
+        # Physical naming strategy
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        hbm2ddl:
+          auto: none
+        show-sql: true
+  devtools:
+    restart:
+      enabled: true
+      exclude: static/**,public/**
+    livereload:
+      enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+
+  swagger-ui:
+    path: /swagger-ui.html
