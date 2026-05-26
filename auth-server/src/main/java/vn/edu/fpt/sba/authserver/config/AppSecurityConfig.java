@@ -19,7 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 public class AppSecurityConfig {
 
     @Bean
-    @Order(1)
     SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         // Mở các endpoint mặc định theo flow của OAuth2
         // /authorize, /token, /userinfo...
@@ -34,7 +33,6 @@ public class AppSecurityConfig {
 
     // Nếu request nào không thuộc Auth Server thì login
     @Bean
-    @Order(2)
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .anyRequest()
@@ -49,12 +47,12 @@ public class AppSecurityConfig {
     UserDetailsService userDetailsService() {
 
         // {noop} ghi chú cho biết không cần Encoder
-        UserDetails uesr = User.withUsername("admin")
+        UserDetails user = User.withUsername("admin")
                 .password("{noop}Fpt@123")
                 .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(uesr);
+        return new InMemoryUserDetailsManager(user);
     }
 
     // Các trường password, secret, Spring sẽ tự tìm các Bean 'passwordEncoder' để thực hiện mã hoá password
