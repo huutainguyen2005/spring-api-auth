@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import vn.edu.fpt.sba.configuration.GenericConfig;
@@ -45,6 +46,7 @@ public class ArtistController {
 
     // Phan trang Artist
     @GetMapping
+    @PreAuthorize("hasAuthority('SCOPE_artists.read')")
     @Operation(summary = "Get artist list", description = "This API will return an artist list")
     @ApiResponse(
             responseCode = "200",
@@ -74,6 +76,7 @@ public class ArtistController {
     }
 
     @GetMapping("/{artistId}")
+    @PreAuthorize("hasAuthority('SCOPE_artists.read')")
     @Operation(summary = "Get artist by ID", description = "This API will return an artist by its ID")
     @ApiResponses({
             @ApiResponse(
@@ -102,8 +105,9 @@ public class ArtistController {
         return artistService.findById(artistId);
     }
 
-    @Operation(summary = "Create artist", description = "This API will create an new artist")
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+    @Operation(summary = "Create artist", description = "This API will create an new artist")
     @ResponseStatus(HttpStatus.CREATED)
     public ArtistResponseDTO save(@Valid @RequestBody ArtistRequestDTO artistRequestDTO) {
 
@@ -113,8 +117,9 @@ public class ArtistController {
         return artistService.save(artist);
     }
 
-    @Operation(summary = "Update artist", description = "This API will update an artist by its ID")
     @PutMapping("/{artistId}")
+    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+    @Operation(summary = "Update artist", description = "This API will update an artist by its ID")
     public ResponseEntity<ArtistResponseDTO> updateArtist(
             @PathVariable Long artistId,
             @RequestBody Artist artist) {
@@ -129,8 +134,9 @@ public class ArtistController {
         return ResponseEntity.ok(updatedArtist);
     }
 
-    @Operation(summary = "Delete artist", description = "This API will delete an artist by its ID")
     @DeleteMapping("/{artistId}")
+    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+    @Operation(summary = "Delete artist", description = "This API will delete an artist by its ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteArtist(@PathVariable Long artistId) {
         artistService.delete(artistId);

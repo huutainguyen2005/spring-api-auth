@@ -5,43 +5,25 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/auth/**").permitAll()
-//                        .anyRequest().authenticated())
-////                .httpBasic(Customizer.withDefaults()) // Bật HTTP Basic Auth
-//                .formLogin(AbstractHttpConfigurer::disable) // Ẩn form login
-//                .csrf(AbstractHttpConfigurer::disable) // Tắt CSRF -> chỉ để dev
-//                .sessionManagement(s ->
-//                        s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//        ;
-//        return http.build();
-//    }
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-//        return config.getAuthenticationManager();
-//    }
+    // Giả sử scope artists.read -> GET list  & getById
+    //        scope artists.write -> PUT/POST/DELETE
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher("/api/v1/artists/**")
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().hasAuthority("SCOPE_artists.read"))
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(Customizer.withDefaults()));
+
+        // Khai báo đây là 1 resource server
+        http.oauth2ResourceServer(oauth2 ->
+                oauth2.jwt(Customizer.withDefaults()));
 
         return http.build();
     }

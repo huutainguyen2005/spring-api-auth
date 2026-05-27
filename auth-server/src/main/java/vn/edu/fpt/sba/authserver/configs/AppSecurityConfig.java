@@ -1,18 +1,20 @@
-package vn.edu.fpt.sba.authserver.config;
+package vn.edu.fpt.sba.authserver.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import vn.edu.fpt.sba.authserver.repositories.UserRepository;
+
+import java.security.Principal;
 
 @Configuration
 @EnableWebSecurity
@@ -42,18 +44,38 @@ public class AppSecurityConfig {
         return http.build();
     }
 
-    // Dùng thử User in-memory
+    // VD them thong tin bo sung vao trong JWT
+    // User info username/email/dob...
+    // ROLE
     @Bean
-    UserDetailsService userDetailsService() {
-
-        // {noop} ghi chú cho biết không cần Encoder
-        UserDetails user = User.withUsername("admin")
-                .password("{noop}Fpt@123")
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
+    public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer(UserRepository userRepository) {
+        return context -> {
+            // Kiem tra neu dang la access_token
+            if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
+                var principal = context.getPrincipal();
+                var authorities = context.getPrincipal().getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+                var user = userRepository.findByUsername(principal.getName());
+                context.getClaims()
+                        .claim("roles", authorities)
+                        .claim("email", user.map(
+                                user1 -> user1.getEmail()
+                        ).orElse("no_email"));
+            }
+        };
     }
+
+    // Dùng thử User in-memory
+//    @Bean
+//    UserDetailsService userDetailsService() {
+//
+//        // {noop} ghi chú cho biết không cần Encoder
+//        UserDetails user = User.withUsername("admin")
+//                .password("{noop}Fpt@123")
+//                .roles("ADMIN")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user);
+//    }
 
     // Các trường password, secret, Spring sẽ tự tìm các Bean 'passwordEncoder' để thực hiện mã hoá password
     // @Bean

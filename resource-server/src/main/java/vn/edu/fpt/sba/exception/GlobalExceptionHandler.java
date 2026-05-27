@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @ResponseBody
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ApiError> handlerException(RuntimeException ex) {
-        ApiError json = new ApiError(LocalDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                "Not Found"
-                );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(json);
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ResponseEntity<ApiError> handlerException(RuntimeException ex) {
+//        ApiError json = new ApiError(LocalDateTime.now(),
+//                HttpStatus.NOT_FOUND.value(),
+//                ex.getMessage(),
+//                "Not Found"
+//                );
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(json);
+//    }
 }
