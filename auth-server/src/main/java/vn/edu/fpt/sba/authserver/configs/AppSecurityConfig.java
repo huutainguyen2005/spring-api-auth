@@ -6,6 +6,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
@@ -53,7 +55,7 @@ public class AppSecurityConfig {
             // Kiem tra neu dang la access_token
             if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
                 var principal = context.getPrincipal();
-                var authorities = context.getPrincipal().getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+                var authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
                 var user = userRepository.findByUsername(principal.getName());
                 context.getClaims()
                         .claim("roles", authorities)
@@ -62,6 +64,11 @@ public class AppSecurityConfig {
                         ).orElse("no_email"));
             }
         };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     // Dùng thử User in-memory

@@ -46,7 +46,7 @@ public class ArtistController {
 
     // Phan trang Artist
     @GetMapping
-    @PreAuthorize("hasAuthority('SCOPE_artists.read')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @Operation(summary = "Get artist list", description = "This API will return an artist list")
     @ApiResponse(
             responseCode = "200",
@@ -76,7 +76,7 @@ public class ArtistController {
     }
 
     @GetMapping("/{artistId}")
-    @PreAuthorize("hasAuthority('SCOPE_artists.read')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @Operation(summary = "Get artist by ID", description = "This API will return an artist by its ID")
     @ApiResponses({
             @ApiResponse(
@@ -106,10 +106,14 @@ public class ArtistController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+    // Về mặc định, các authorities (ROLE_ SCOPE_ ...) chỉ tự động nhận diện các SCOPE
+    // Để trích xuất được các thông tin "custom" thêm vào JWT (access_token) vd như ROLE_ADMIN
+    // ta cần định nghĩa 1 JWT converter - customized token -> ROLE_XXXX
+//    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Create artist", description = "This API will create an new artist")
     @ResponseStatus(HttpStatus.CREATED)
-    public ArtistResponseDTO save(@Valid @RequestBody ArtistRequestDTO artistRequestDTO) {
+    public ArtistResponseDTO createArtist(@Valid @RequestBody ArtistRequestDTO artistRequestDTO) {
 
         Artist artist = new Artist();
         artist.setName(artistRequestDTO.name());
@@ -118,7 +122,8 @@ public class ArtistController {
     }
 
     @PutMapping("/{artistId}")
-    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+//    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Update artist", description = "This API will update an artist by its ID")
     public ResponseEntity<ArtistResponseDTO> updateArtist(
             @PathVariable Long artistId,
@@ -135,7 +140,8 @@ public class ArtistController {
     }
 
     @DeleteMapping("/{artistId}")
-    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+//    @PreAuthorize("hasAuthority('SCOPE_artists.write')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Delete artist", description = "This API will delete an artist by its ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteArtist(@PathVariable Long artistId) {
