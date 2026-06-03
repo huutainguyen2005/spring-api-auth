@@ -1,25 +1,18 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import {Header} from './components/Composition.jsx'
+import {HomePage} from "./components/HomePage.jsx";
+import {ArtistList, ArtistForm} from './components/ArtistList.jsx'
+import {Route, Routes} from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <h1>Welcome to our first application</h1>
-      <p>This is class SE1905</p>
-        <form action="">
-            {/* Vanilla HTML */}
-            {/*<input name="" class="form-control"/>*/}
-
-            {/* React approach -> Component -> props */}
-            {/*<Input></Input>*/}
-        </form>
-    </>
-  );
+    return (
+      <Header>
+          <Routes>
+          <Route path="/" element={<HomePage/>}/>
+          <Route path="/artists" element={<ArtistList/>}/>
+          <Route path="/artists/new" element={<ArtistForm/>}/>
+          </Routes>
+      </Header>
+    );
 }
 
 export default App
