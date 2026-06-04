@@ -3,11 +3,11 @@ import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
 
 function AlbumTableRow({ album }) {
-
     return (
         <tr>
-            <td>{album.id}</td>
+            <td>{album.albumId}</td>
             <td>{album.title}</td>
+            {/*<td>{album.artist.name}</td>*/}
             <td>
                 <Button
                     variant="primary"
@@ -32,19 +32,20 @@ function AlbumTableRow({ album }) {
 function AlbumTable({albumList}) {
 
     return (
-            <Table hover responsive>
+            <Table>
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
+                    {/*<th>Artist Name</th>*/}
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {
                     albumList.length > 0 ?
-                        albumList.map(album => <AlbumTableRow key={album.id} album={album} />) :
-                        <tr><td style={{ textAlign: 'center' }} colSpan={4}>There are no albums found.</td></tr>
+                        albumList.map(album => <AlbumTableRow key={album.albumId} album={album} />) :
+                        <tr><td style={{ textAlign: 'center' }} colSpan={3}>There are no albums found.</td></tr>
                 }
                 </tbody>
             </Table>
@@ -53,19 +54,19 @@ function AlbumTable({albumList}) {
 
 export function AlbumList() {
 
-    //state artists
+    //state albums
     const [albums, setAlbums] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Call API -> get artist list
+    // Call API -> get album list
     // Inline arrow fn
 
     useEffect(() => {
         fetch("http://localhost:8080/api/v1/albums")
             .then(res => {
                 if (!res.ok) {
-                    throw new Error(`Lỗi mạng hoặc server không phản hồi (${response.status})!`);
+                    throw new Error(`Lỗi mạng hoặc server không phản hồi (${res.status})!`);
                 }
                 return res.json();
             })
@@ -94,7 +95,7 @@ export function AlbumList() {
                     <Spinner animation="border" variant="primary" />
                 </div>
             ) : (
-                <AlbumTable artistList={albums} />
+                <AlbumTable albumList={albums} />
             )}
 
         </Container>

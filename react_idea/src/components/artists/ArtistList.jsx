@@ -64,7 +64,7 @@ export function ArtistList() {
         fetch("http://localhost:8080/api/v1/artists")
             .then(res => {
                 if (!res.ok) {
-                    throw new Error(`Lỗi mạng hoặc server không phản hồi (${response.status})!`);
+                    throw new Error(`Lỗi mạng hoặc server không phản hồi (${res.status})!`);
                 }
                 return res.json();
             })
