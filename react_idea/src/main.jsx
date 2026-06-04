@@ -1,10 +1,8 @@
 import{ StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Header, Footer} from "./components/Composition.jsx";
-import {ArtistTable} from "./components/artists/ArtistList.jsx";
-import {BrowserRouter, HashRouter, Route, Routes} from "react-router-dom";
-import {AlbumTable} from "./components/albums/AlbumList.jsx";
+import { HashRouter} from "react-router-dom";
+import App from "./App.jsx";
 
 // // JSX -> HTML/XML inside JS code
 // const greet = <h1>Hello everyone!</h1>;
@@ -22,17 +20,7 @@ createRoot(document.getElementById('root')).render(
 
       {/*khuyên dùng <BrowserRouter>*/}
       <HashRouter>
-          <div className="d-flex flex-column min-vh-100">
-              <Header />
-
-              <Routes>
-                  <Route path="/" element={<ArtistTable />} />
-                  <Route path="/artists" element={<ArtistTable />} />
-                  <Route path="/albums" element={<AlbumTable />} />
-              </Routes>
-
-              <Footer />
-          </div>
+          <App/>
       </HashRouter>
     {/*</BrowserRouter>*/}
 

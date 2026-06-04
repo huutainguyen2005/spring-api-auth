@@ -1,4 +1,4 @@
-export const albumList = [
+export const dataAlbum = [
     { id: 1, title: 'For Those About To Rock We Salute You', artistId: 1 },
     { id: 2, title: 'Balls to the Wall', artistId: 2 },
     { id: 3, title: 'Restless and Wild', artistId: 2 },
@@ -11,7 +11,7 @@ export const albumList = [
     { id: 10, title: 'Audioslave', artistId: 8 },
 ];
 
-export const artistList = [
+export const dataArtist = [
     { id: 1, name: 'AC/DC' },
     { id: 2, name: 'Accept' },
     { id: 3, name: 'Aerosmith' },

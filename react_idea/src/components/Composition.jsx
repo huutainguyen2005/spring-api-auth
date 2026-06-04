@@ -15,20 +15,20 @@ export function Header() {
                     <Nav className="me-auto">
                         {/* Dropdown Artists */}
                         <NavDropdown title="Artists" id="artists-dropdown">
-                            <NavDropdown.Item as={Link} to="/artists">List all artists</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/artists/add">Add new artists</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/danh-sach-nghe-si">List all artists</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/them-moi-nghe-si">Add new artists</NavDropdown.Item>
                         </NavDropdown>
 
                         {/* Dropdown Albums */}
                         <NavDropdown title="Albums" id="albums-dropdown">
-                            <NavDropdown.Item as={Link} to="/albums">List all albums</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/albums/add">Add new album</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/danh-sach-album">List all albums</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/them-moi-album">Add new album</NavDropdown.Item>
                         </NavDropdown>
 
                         {/* Dropdown Genres */}
                         <NavDropdown title="Genres" id="genres-dropdown">
-                            <NavDropdown.Item as={Link} to="/genres">List all genre</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/genres/add">Add new genre</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/danh-sach-the-loai">List all genre</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/them-moi-the-loai">Add new genre</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>

@@ -17,7 +17,7 @@ import vn.edu.fpt.sba.util.JwtUtil;
 
 import java.io.IOException;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
