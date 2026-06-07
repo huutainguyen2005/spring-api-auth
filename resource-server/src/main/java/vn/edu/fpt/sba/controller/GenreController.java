@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.sba.configuration.GenericConfig;
 import vn.edu.fpt.sba.dto.response.ArtistDetailResponseDTO;
@@ -35,6 +36,7 @@ public class GenreController {
     private final IGenreService genreService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @Operation(summary = "Get genre list", description = "This API will return a genre list")
     @ApiResponse(
             responseCode = "200",
@@ -63,6 +65,8 @@ public class GenreController {
 
     }
 
+    @GetMapping("/{genreId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @Operation(summary = "Get genre by ID", description = "This API will return a genre by its ID")
     @ApiResponses({
             @ApiResponse(
@@ -82,20 +86,21 @@ public class GenreController {
                     )
             )
     })
-    @GetMapping("/{genreId}")
     public GenreResponseDTO getGenreById(@PathVariable Long genreId) {
         return  genreService.findById(genreId);
     }
 
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "Create genre", description = "This API will create a new genre")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
     public GenreResponseDTO createGenre(@RequestBody Genre genre) {
         return genreService.save(genre);
     }
 
-    @Operation(summary = "Update genre", description = "This API will update a genre by its ID")
     @PutMapping("/{genreId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "Update genre", description = "This API will update a genre by its ID")
     public ResponseEntity<GenreResponseDTO> updateGenre(@PathVariable Long genreId,
                                                         @RequestBody Genre genre) {
         GenreResponseDTO updatedGenre = genreService.update(genreId, genre);
@@ -107,8 +112,9 @@ public class GenreController {
         return ResponseEntity.ok(updatedGenre);
     }
 
-    @Operation(summary = "Delete genre", description = "This API will delete a genre by its ID")
     @DeleteMapping("/{genreId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "Delete genre", description = "This API will delete a genre by its ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteGenre(@PathVariable Long genreId) {
         genreService.delete(genreId);

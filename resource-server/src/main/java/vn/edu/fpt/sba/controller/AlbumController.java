@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.sba.configuration.GenericConfig;
 import vn.edu.fpt.sba.dto.request.AlbumRequestDTO;
@@ -28,11 +29,12 @@ import vn.edu.fpt.sba.service.IAlbumService;
 @RequestMapping("/api/v1/albums")
 @RequiredArgsConstructor
 @Tag(name = "Album APIs", description = "APIs for managing albums")
-public class AlbumController {
+public class    AlbumController {
 
     private final IAlbumService albumService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @Operation(summary = "Get album list", description = "This API will return an album list")
     @ApiResponse(
             responseCode = "200",
@@ -62,6 +64,7 @@ public class AlbumController {
     }
 
     @GetMapping("/{albumId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @Operation(summary = "Get album by ID", description = "This API will return an album by its ID")
     @ApiResponses({
             @ApiResponse(
@@ -91,15 +94,17 @@ public class AlbumController {
         return ResponseEntity.ok(album);
     }
 
-    @Operation(summary = "Create album", description = "This API will create an new album")
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "Create album", description = "This API will create an new album")
     @ResponseStatus(HttpStatus.CREATED)
     public AlbumDetailResponseDTO save(@Valid @RequestBody AlbumRequestDTO albumRequestDTO) {
         return albumService.save(albumRequestDTO);
     }
 
-    @Operation(summary = "Update album", description = "This API will update an album by its ID")
     @PutMapping("/{albumId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "Update album", description = "This API will update an album by its ID")
     public ResponseEntity<AlbumDetailResponseDTO> updateAlbum(
             @PathVariable Long albumId,
             @RequestBody Album album
@@ -115,8 +120,9 @@ public class AlbumController {
         return ResponseEntity.ok(updatedAlbum);
     }
 
-    @Operation(summary = "Delete album", description = "This API will delete an album")
     @DeleteMapping("/{albumId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "Delete album", description = "This API will delete an album")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteAlbum(@PathVariable Long albumId) {
         albumService.delete(albumId);
