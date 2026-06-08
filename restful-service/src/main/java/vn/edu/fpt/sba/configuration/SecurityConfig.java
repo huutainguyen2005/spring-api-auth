@@ -23,10 +23,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // Bật CORS với cấu hình mặc định sẽ tìm (Bean đã đc override bằng corsConfigurationSource)
+                .cors(Customizer.withDefaults()) //
+                // Bật CORS với cấu hình chỉ định corsConfigurationSource
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // Dùng cái nào cũng được, nếu có nhiều bean thì dùng cái 2
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/v1/artists/**").permitAll()
+//                        .requestMatchers("/api/v1/artists/**").permitAll()
+                        .requestMatchers("/api/v1/**").permitAll()
+                        .requestMatchers("/v3/api-docs").permitAll()
                         .anyRequest().authenticated())
 //                .httpBasic(Customizer.withDefaults()) // Bật HTTP Basic Auth
                 .formLogin(AbstractHttpConfigurer::disable) // Ẩn form login

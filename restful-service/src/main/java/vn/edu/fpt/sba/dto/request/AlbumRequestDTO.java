@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public record AlbumRequestDTO(
         @NotBlank(message = "Title is required")
-        @Size(min = 10, message = "Title must be ...")
+        @Size(min = 1, max = 255, message = "Title must be between 1 and 255 characters")
         String title,
 
         @NotNull(message = "Artist ID is required")
