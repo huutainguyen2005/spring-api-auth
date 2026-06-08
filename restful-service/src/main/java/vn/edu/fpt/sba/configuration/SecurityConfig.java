@@ -34,6 +34,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/api/v1/artists/**").permitAll()
                         .requestMatchers("/api/v1/**").permitAll()
                         .requestMatchers("/v3/api-docs").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())
 //                .httpBasic(Customizer.withDefaults()) // Bật HTTP Basic Auth
                 .formLogin(AbstractHttpConfigurer::disable) // Ẩn form login

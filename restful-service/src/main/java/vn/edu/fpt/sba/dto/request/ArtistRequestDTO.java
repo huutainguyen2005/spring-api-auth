@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 public record ArtistRequestDTO(
         @NotBlank(message = "Name is required")
-        @Size(min = 3, message = "Name must be at least 3 letters")
+        @Size(min = 5, message = "Name must be at least 5 letters")
         String name) {
 
 }
