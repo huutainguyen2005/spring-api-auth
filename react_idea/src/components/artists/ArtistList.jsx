@@ -76,7 +76,7 @@ export function ArtistList() {
                 setError(err.message);
                 setIsLoading(false);
             });
-    }, []);
+    }, []); // Chạy 1 lần duy nhất khi component được mount
 
 
     return (

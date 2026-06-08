@@ -6,21 +6,21 @@ function AlbumTableRow({ album }) {
     return (
         <tr>
             <td>{album.albumId}</td>
-            <td>{album.title}</td>
             {/*<td>{album.artist.name}</td>*/}
+            <td>{album.title}</td>
             <td>
                 <Button
                     variant="primary"
                     size="sm"
                     className="me-2"
-                    as={Link} to={`/albums/edit/${album.id}`}
+                    as={Link} to={`/chinh-sua-album/${album.id}`}
                 >
                     Edit
                 </Button>
                 <Button
                     variant="danger"
                     size="sm"
-                    as={Link} to={`/albums/delete/${album.id}`}
+                    as={Link} to={`/xoa-album/${album.id}`}
                 >
                     Delete
                 </Button>
@@ -36,8 +36,8 @@ function AlbumTable({albumList}) {
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Title</th>
                     {/*<th>Artist Name</th>*/}
+                    <th>Title</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
