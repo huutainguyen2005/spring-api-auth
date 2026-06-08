@@ -41,9 +41,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // SỬA DÒNG NÀY: Thêm cổng 8888 vào danh sách AllowedOrigins
         configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8888"));
-
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
