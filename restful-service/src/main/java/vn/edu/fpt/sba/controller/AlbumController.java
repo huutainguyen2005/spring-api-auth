@@ -42,20 +42,7 @@ public class AlbumController {
                     schema = @Schema(implementation = AlbumDetailResponseDTO.class)
             )
     )
-    @Parameter(name = "page", description = "Page number (default: 1)", example = "1", schema = @Schema(type = "integer"))
-    @Parameter(name = "size", description = "Size number (default: 10)", example = "10", schema = @Schema(type = "integer"))
-    public PageResponseDTO<AlbumDetailResponseDTO> getAllAlbums(
-            @RequestParam(required = false, defaultValue = "1") Integer page,
-            @RequestParam(required = false, defaultValue = "10") Integer size){
-
-        if (page == null) {
-            page = 1;
-        }
-        if (size == null) {
-            size = GenericConfig.DEFAULT_PAGINATION_SIZE;
-        }
-
-        Pageable pageable = PageRequest.of(page - 1, size); // Be careful this is a potential bug
+    public PageResponseDTO<AlbumDetailResponseDTO> getAllAlbums(@ParameterObject @PageableDefault(size = 10) Pageable pageable){
         Page<AlbumDetailResponseDTO> pageRes = albumService.getAllAlbums(pageable);
         return PageResponseDTO.of(pageRes);
 
