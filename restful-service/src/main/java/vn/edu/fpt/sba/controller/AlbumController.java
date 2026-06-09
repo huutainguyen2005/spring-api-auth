@@ -46,7 +46,7 @@ public class AlbumController {
     @Parameter(name = "size", description = "Size number (default: 10)", example = "10", schema = @Schema(type = "integer"))
     public PageResponseDTO<AlbumDetailResponseDTO> getAllAlbums(
             @RequestParam(required = false, defaultValue = "1") Integer page,
-            @RequestParam(required = false, defaultValue = "20") Integer size){
+            @RequestParam(required = false, defaultValue = "10") Integer size){
 
         if (page == null) {
             page = 1;

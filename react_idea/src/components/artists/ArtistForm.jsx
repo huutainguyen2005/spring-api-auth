@@ -21,9 +21,6 @@ export function ArtistForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-
     const navigate = useNavigate();
 
     const sleep = (ms) => new Promise((evo) => setTimeout(evo, ms));
