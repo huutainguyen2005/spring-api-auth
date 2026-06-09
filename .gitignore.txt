@@ -1,0 +1,30 @@
+# --- IDEs (IntelliJ, VS Code) ---
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.iws
+
+# --- Java/Build ---
+target/
+build/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.tmp
+*.bak
+
+# --- Environment & Sensitive Data ---
+.env
+*.properties.local
+application-dev.properties
+application-prod.properties
+application-secret.properties
+datasource.properties
+
+# --- OS ---
+.DS_Store
+Thumbs.db
