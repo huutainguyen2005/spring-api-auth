@@ -1,4 +1,4 @@
-import {Alert, Button, Container, Pagination, Spinner, Table} from "react-bootstrap";
+import {Alert, Button, Container, Form, Pagination, Spinner, Table} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
 
@@ -59,6 +59,7 @@ export function AlbumList() {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [jumpPage, setJumpPage] = useState("");
 
     // Call API -> get album list
     // Inline arrow fn
@@ -83,17 +84,82 @@ export function AlbumList() {
             loadData().catch(console.error);
     }, [currentPage]);
 
+    const handleInputChange = (e) => {
+        const val = e.target.value;
+
+        if (val === "") {
+            setJumpPage("");
+            return;
+        }
+
+        const parsed = parseInt(val, 10);
+        if (!isNaN(parsed)) {
+            if (parsed < 1) {
+                setJumpPage(1);
+            } else if (parsed > totalPages) {
+                setJumpPage(totalPages);
+            } else {
+                setJumpPage(parsed);
+            }
+        }
+    };
+
+    const handleJumpPage = (e) => {
+        if (e.key === 'Enter') {
+            if (jumpPage !== "") {
+                setCurrentPage(Number(jumpPage));
+            }
+        }
+    };
+
     let paginationItems = [];
-    for (let number = 1; number <= totalPages; number++) {
-        paginationItems.push(
-            <Pagination.Item
-                key={number}
-                active={number === currentPage}
-                onClick={() => setCurrentPage(number)}
-            >
-                {number}
-            </Pagination.Item>
-        );
+
+    if (totalPages <= 10) {
+        for (let number = 1; number <= totalPages; number++) {
+            paginationItems.push(
+                <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                    {number}
+                </Pagination.Item>
+            );
+        }
+    } else {
+        // Đang ở những trang đầu (VD: < 1 2 3 4 5 6 7 ... 28 >)
+        if (currentPage <= 5) {
+            for (let number = 1; number <= 7; number++) {
+                paginationItems.push(
+                    <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                        {number}
+                    </Pagination.Item>
+                );
+            }
+            paginationItems.push(<Pagination.Ellipsis key="ellipsis-end" disabled />);
+            paginationItems.push(<Pagination.Item key={totalPages} onClick={() => setCurrentPage(totalPages)}>{totalPages}</Pagination.Item>);
+        }
+        // Đang ở những trang cuối (VD: < 1 ... 22 23 24 25 26 27 28 >)
+        else if (currentPage >= totalPages - 4) {
+            paginationItems.push(<Pagination.Item key={1} onClick={() => setCurrentPage(1)}>1</Pagination.Item>);
+            paginationItems.push(<Pagination.Ellipsis key="ellipsis-start" disabled />);
+            for (let number = totalPages - 6; number <= totalPages; number++) {
+                paginationItems.push(
+                    <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                        {number}
+                    </Pagination.Item>
+                );
+            }
+        }
+        else {
+            paginationItems.push(<Pagination.Item key={1} onClick={() => setCurrentPage(1)}>1</Pagination.Item>);
+            paginationItems.push(<Pagination.Ellipsis key="ellipsis-start" disabled />);
+            for (let number = currentPage - 2; number <= currentPage + 2; number++) {
+                paginationItems.push(
+                    <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                        {number}
+                    </Pagination.Item>
+                );
+            }
+            paginationItems.push(<Pagination.Ellipsis key="ellipsis-end" disabled />);
+            paginationItems.push(<Pagination.Item key={totalPages} onClick={() => setCurrentPage(totalPages)}>{totalPages}</Pagination.Item>);
+        }
     }
 
     return (
@@ -113,25 +179,36 @@ export function AlbumList() {
                     <AlbumTable albumList={albums} />
 
                     {totalPages > 1 && (
-                        <Pagination className="justify-content-center mt-4">
-                            <Pagination.First
-                                onClick={() => setCurrentPage(1)}
-                                disabled={currentPage === 1}
-                            />
-                            <Pagination.Prev
-                                onClick={() => setCurrentPage(currentPage - 1)}
-                                disabled={currentPage === 1}
-                            />
-                            {paginationItems}
-                            <Pagination.Next
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                            />
-                            <Pagination.Last
-                                onClick={() => setCurrentPage(totalPages)}
-                                disabled={currentPage === totalPages}
-                            />
-                        </Pagination>
+                        <div className="d-flex justify-content-center align-items-center mt-4">
+                            <Pagination className="mb-0 me-4">
+                                <Pagination.Prev
+                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                />
+
+                                {paginationItems}
+
+                                <Pagination.Next
+                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                />
+                            </Pagination>
+
+                            <div className="d-flex align-items-center">
+                                <span className="me-2 text-muted text-nowrap">Go to page:</span>
+                                <Form.Control
+                                    type="number"
+                                    size="sm"
+                                    style={{ width: '70px', textAlign: 'center' }}
+                                    value={jumpPage}
+                                    onChange={handleInputChange}
+                                    onKeyDown={handleJumpPage}
+                                    placeholder=""
+                                    min={1}
+                                    max={totalPages}
+                                />
+                            </div>
+                        </div>
                     )}
                 </>
             )}
