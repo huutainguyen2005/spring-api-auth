@@ -11,21 +11,22 @@ export function AlbumForm() {
 
     const navigate = useNavigate();
 
+    const sleep = (ms) => new Promise((evo) => setTimeout(evo, ms));
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         setError(null);
 
-        // // Lấy token từ Postman và dán tạm vào biến này để test.
-        // const fakeAdminToken = "DAN_TOKEN_VAO_DAY";
+        console.log("Form data: ", {title, isSubmitting});
+        await sleep(2000);
 
-        // Dùng Fetch gửi phương thức POST xuống Backend
+
         try {
         const res = await fetch("http://localhost:8080/api/v1/albums", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                // "Authorization": `Bearer ${fakeAdminToken}` // Gửi token qua cổng Security
             },
             body: JSON.stringify({
                 title: title,
@@ -34,6 +35,8 @@ export function AlbumForm() {
         })
             if(res.status === 201){
                 navigate("/danh-sach-album");
+            } else if (!res.ok) {
+                throw new Error("Artist ID does not exist!");
             }
         } catch (error) {
             setError(error.message);
@@ -41,6 +44,7 @@ export function AlbumForm() {
         }
     };
 
+    const isIdInvalid = artistId !== "" && parseInt(artistId) <= 0;
 
     return (
         <Container  className="mt-4 mb-5">
@@ -55,8 +59,12 @@ export function AlbumForm() {
                             placeholder="Enter artist ID"
                             value={artistId}
                             onChange={(e) => setArtistId(e.target.value)}
+                            isInvalid={isIdInvalid}
                             required
                         />
+                        <Form.Control.Feedback type="invalid">
+                            Artist ID must be greater than 0.
+                        </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
 
@@ -68,8 +76,12 @@ export function AlbumForm() {
                             placeholder="Enter album title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                            isInvalid={title.length > 0 && title.trim().length < 5}
                             required
                         />
+                        <Form.Control.Feedback type="invalid">
+                            Album title must be at least 5 characters.
+                        </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
 

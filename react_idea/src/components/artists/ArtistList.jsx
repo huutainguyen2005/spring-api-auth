@@ -12,14 +12,14 @@ function ArtistTableRow({ artist }) {
                     variant="primary"
                     size="sm"
                     className="me-2"
-                    as={Link} to={`/chinh-sua-nghe-si/${artist.id}`}
+                    as={Link} to={`/chinh-sua-nghe-si/${artist.artistId}`}
                 >
                     Edit
                 </Button>
                 <Button
                     variant="danger"
                     size="sm"
-                    as={Link} to={`/xoa-nghe-si/${artist.id}`}
+                    as={Link} to={`/xoa-nghe-si/${artist.artistId}`}
                 >
                     Delete
                 </Button>
@@ -71,7 +71,7 @@ export function ArtistList() {
             try {
                 const res = await fetch(`http://localhost:8080/api/v1/artists?page=${currentPage}&size=10`);
                 if (!res.ok) {
-                    throw new Error(`Lỗi mạng hoặc server không phản hồi (${res.status})!`);
+                    throw new Error(`Network error or server not responding (${res.status})!`);
                 }
                 const data = await res.json();
                 setArtists(data.content);

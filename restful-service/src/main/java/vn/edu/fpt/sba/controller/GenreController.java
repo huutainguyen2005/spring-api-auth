@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,7 @@ public class GenreController {
 
     }
 
+    @GetMapping("/{genreId}")
     @Operation(summary = "Get genre by ID", description = "This API will return a genre by its ID")
     @ApiResponses({
             @ApiResponse(
@@ -69,20 +71,21 @@ public class GenreController {
                     )
             )
     })
-    @GetMapping("/{genreId}")
     public GenreResponseDTO getGenreById(@PathVariable Long genreId) {
         return  genreService.findById(genreId);
     }
 
+    @PostMapping
     @Operation(summary = "Create genre", description = "This API will create a new genre")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public GenreResponseDTO createGenre(@RequestBody Genre genre) {
+    public GenreResponseDTO createGenre(@Valid @RequestBody GenreResponseDTO genreResponseDTO) {
+        Genre genre = new Genre();
+        genre.setName(genreResponseDTO.name());
         return genreService.save(genre);
     }
 
-    @Operation(summary = "Update genre", description = "This API will update a genre by its ID")
     @PutMapping("/{genreId}")
+    @Operation(summary = "Update genre", description = "This API will update a genre by its ID")
     public ResponseEntity<GenreResponseDTO> updateGenre(@PathVariable Long genreId,
                                                         @RequestBody Genre genre) {
         GenreResponseDTO updatedGenre = genreService.update(genreId, genre);
@@ -94,8 +97,8 @@ public class GenreController {
         return ResponseEntity.ok(updatedGenre);
     }
 
-    @Operation(summary = "Delete genre", description = "This API will delete a genre by its ID")
     @DeleteMapping("/{genreId}")
+    @Operation(summary = "Delete genre", description = "This API will delete a genre by its ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteGenre(@PathVariable Long genreId) {
         genreService.delete(genreId);

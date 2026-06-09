@@ -78,15 +78,16 @@ public class AlbumController {
         return ResponseEntity.ok(album);
     }
 
-    @Operation(summary = "Create album", description = "This API will create an new album")
+
     @PostMapping
+    @Operation(summary = "Create album", description = "This API will create an new album")
     @ResponseStatus(HttpStatus.CREATED)
     public AlbumDetailResponseDTO save(@Valid @RequestBody AlbumRequestDTO albumRequestDTO) {
         return albumService.save(albumRequestDTO);
     }
 
-    @Operation(summary = "Update album", description = "This API will update an album by its ID")
     @PutMapping("/{albumId}")
+    @Operation(summary = "Update album", description = "This API will update an album by its ID")
     public ResponseEntity<AlbumDetailResponseDTO> updateAlbum(
             @PathVariable Long albumId,
             @RequestBody Album album
@@ -102,8 +103,8 @@ public class AlbumController {
         return ResponseEntity.ok(updatedAlbum);
     }
 
-    @Operation(summary = "Delete album", description = "This API will delete an album")
     @DeleteMapping("/{albumId}")
+    @Operation(summary = "Delete album", description = "This API will delete an album")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteAlbum(@PathVariable Long albumId) {
         albumService.delete(albumId);

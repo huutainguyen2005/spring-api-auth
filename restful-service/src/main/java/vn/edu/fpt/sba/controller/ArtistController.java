@@ -89,8 +89,8 @@ public class ArtistController {
         return artistService.findById(artistId);
     }
 
-    @Operation(summary = "Create artist", description = "This API will create an new artist")
     @PostMapping
+    @Operation(summary = "Create artist", description = "This API will create an new artist")
     @ResponseStatus(HttpStatus.CREATED)
     public ArtistResponseDTO save(@Valid @RequestBody ArtistRequestDTO artistRequestDTO) {
 
@@ -100,8 +100,8 @@ public class ArtistController {
         return artistService.save(artist);
     }
 
-    @Operation(summary = "Update artist", description = "This API will update an artist by its ID")
     @PutMapping("/{artistId}")
+    @Operation(summary = "Update artist", description = "This API will update an artist by its ID")
     public ResponseEntity<ArtistResponseDTO> updateArtist(
             @PathVariable Long artistId,
             @RequestBody Artist artist) {
@@ -116,8 +116,8 @@ public class ArtistController {
         return ResponseEntity.ok(updatedArtist);
     }
 
-    @Operation(summary = "Delete artist", description = "This API will delete an artist by its ID")
     @DeleteMapping("/{artistId}")
+    @Operation(summary = "Delete artist", description = "This API will delete an artist by its ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteArtist(@PathVariable Long artistId) {
         artistService.delete(artistId);

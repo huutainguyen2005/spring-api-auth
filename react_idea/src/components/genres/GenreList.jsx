@@ -12,14 +12,14 @@ function GenreTableRow({ genre }) {
                     variant="primary"
                     size="sm"
                     className="me-2"
-                    as={Link} to={`/chinh-sua-the-loai/${genre.id}`}
+                    as={Link} to={`/chinh-sua-the-loai/${genre.genreId}`}
                 >
                     Edit
                 </Button>
                 <Button
                     variant="danger"
                     size="sm"
-                    as={Link} to={`/xoa-the-loai/${genre.id}`}
+                    as={Link} to={`/xoa-the-loai/${genre.genreId}`}
                 >
                     Delete
                 </Button>
@@ -70,7 +70,7 @@ export function GenreList() {
             try {
                 const res = await fetch(`http://localhost:8080/api/v1/genres?page=${currentPage}&size=10`);
                 if (!res.ok) {
-                    throw new Error(`Lỗi mạng hoặc server không phản hồi (${res.status})!`);
+                    throw new Error(`Network error or server not responding (${res.status})!`);
                 }
                 const data = await res.json();
                 setGenres(data.content);

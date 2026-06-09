@@ -7,6 +7,9 @@ import {AlbumList} from "./components/albums/AlbumList.jsx";
 import {GenreList} from "./components/genres/GenreList.jsx";
 import {AlbumForm} from "./components/albums/AlbumForm.jsx";
 import {GenreForm} from "./components/genres/GenreForm.jsx";
+import {ArtistDelete} from "./components/artists/ArtistDelete.jsx";
+import {AlbumDelete} from "./components/albums/AlbumDelete.jsx";
+import {GenreDelete} from "./components/genres/GenreDelete.jsx";
 
 function App() {
     return (
@@ -15,13 +18,25 @@ function App() {
                 <Header/>
                      <main>
                         <Routes>
-                          <Route path="/" element={<HomePage/>}/>
-                          <Route path="/danh-sach-nghe-si" element={<ArtistList/>}/>
-                          <Route path="/them-moi-nghe-si" element={<ArtistForm/>}/>
-                          <Route path="/danh-sach-album" element={<AlbumList/>}/>
-                          <Route path="/them-moi-album" element={<AlbumForm/>}/>
-                          <Route path="/danh-sach-the-loai" element={<GenreList/>}/>
-                          <Route path="/them-moi-the-loai" element={<GenreForm/>}/>
+
+                            {/* Default Route */}
+                            <Route path="/" element={<HomePage/>}/>
+
+                            {/* Artist Route */}
+                            <Route path="/danh-sach-nghe-si" element={<ArtistList/>}/>
+                            <Route path="/them-moi-nghe-si" element={<ArtistForm/>}/>
+                            <Route path="/xoa-nghe-si/:artistId" element={<ArtistDelete/>}/>
+
+                            {/* Album Route */}
+                            <Route path="/danh-sach-album" element={<AlbumList/>}/>
+                            <Route path="/them-moi-album" element={<AlbumForm/>}/>
+                            <Route path="/xoa-album/:albumId" element={<AlbumDelete/>}/>
+
+                            {/* Genre Route */}
+                            <Route path="/danh-sach-the-loai" element={<GenreList/>}/>
+                            <Route path="/them-moi-the-loai" element={<GenreForm/>}/>
+                            <Route path="/xoa-the-loai/:genreId" element={<GenreDelete/>}/>
+
                         </Routes>
                      </main>
                 <Footer/>

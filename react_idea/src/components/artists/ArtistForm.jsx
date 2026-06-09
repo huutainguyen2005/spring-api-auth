@@ -28,10 +28,11 @@ export function ArtistForm() {
     const handleSubmit = async (e) => {
         // Ngăn trình duyệt tự động reload trang (behavior mặc định của thẻ Form)
         e.preventDefault();
-        console.log("Form data: ", {name, isSubmitting});
-        await sleep(2000);
         setIsSubmitting(true);
         setError(null);
+        console.log("Form data: ", {name, isSubmitting});
+        await sleep(2000);
+
 
         // // Lấy token từ Postman và dán tạm vào biến này để test.
         // const fakeAdminToken = "DAN_TOKEN_VAO_DAY";
@@ -56,7 +57,7 @@ export function ArtistForm() {
     };
 
     return (
-        <Container  className="mt-4 mb-5">
+        <Container className="mt-4 mb-5">
             <h1>Add new artist</h1>
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
@@ -68,8 +69,12 @@ export function ArtistForm() {
                             placeholder="Enter artist name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            isInvalid={name.length > 0 && name.trim().length < 3}
                             required
                         />
+                        <Form.Control.Feedback type="invalid">
+                            Artist name must be at least 3 characters.
+                        </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
 

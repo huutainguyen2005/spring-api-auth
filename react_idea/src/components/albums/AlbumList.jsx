@@ -13,14 +13,14 @@ function AlbumTableRow({ album }) {
                     variant="primary"
                     size="sm"
                     className="me-2"
-                    as={Link} to={`/chinh-sua-album/${album.id}`}
+                    as={Link} to={`/chinh-sua-album/${album.albumId}`}
                 >
                     Edit
                 </Button>
                 <Button
                     variant="danger"
                     size="sm"
-                    as={Link} to={`/xoa-album/${album.id}`}
+                    as={Link} to={`/xoa-album/${album.albumId}`}
                 >
                     Delete
                 </Button>
@@ -70,7 +70,7 @@ export function AlbumList() {
             try {
                 const res = await fetch(`http://localhost:8080/api/v1/albums?page=${currentPage}&size=10`);
                 if (!res.ok) {
-                    throw new Error(`Lỗi mạng hoặc server không phản hồi (${res.status})!`);
+                    throw new Error(`Network error or server not responding (${res.status})!`);
                 }
                 const data = await res.json();
                 setAlbums(data.content);
