@@ -1,16 +1,38 @@
 import {Alert, Button, Container, Form, InputGroup, Spinner} from "react-bootstrap";
-import {Link, useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
 
 export function AlbumForm() {
 
+    const { albumId } = useParams();
+    const isEditMode = Boolean(albumId);
     const [title, setTitle] = useState("");
     const [artistId, setArtistId] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoading, setIsLoading] = useState(isEditMode);
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (isEditMode) {
+            const fetchAlbum = async () => {
+                try {
+                    const res = await fetch(`http://localhost:8080/api/v1/albums/${albumId}`);
+                    if (!res.ok) throw new Error("Cannot to load album information!");
+                    const data = await res.json();
+                    setTitle(data.title);
+                    setArtistId(data.artist?.artistId || data.artistId || "");
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchAlbum().catch(console.error);
+        }
+    }, [albumId, isEditMode]);
+    
     const sleep = (ms) => new Promise((evo) => setTimeout(evo, ms));
 
     const handleSubmit = async (e) => {
@@ -23,8 +45,12 @@ export function AlbumForm() {
 
 
         try {
-        const res = await fetch("http://localhost:8080/api/v1/albums", {
-            method: "POST",
+            const url = isEditMode
+            ? `http://localhost:8080/api/v1/albums/${albumId}`
+            : `http://localhost:8080/api/v1/albums`
+            const method = isEditMode ? "PUT" : "POST";
+            const res = await fetch(url, {
+            method: method,
             headers: {
                 "Content-Type": "application/json",
             },
@@ -33,23 +59,38 @@ export function AlbumForm() {
                 artistId: parseInt(artistId)
             })
         })
-            if(res.status === 201){
-                navigate("/danh-sach-album");
-            } else if (!res.ok) {
-                throw new Error("Artist ID does not exist!");
+
+            if(!res.ok) {
+                const payload = await res.json();
+                const msg = payload?.message || "Save failed! Please check the server again.";
+                throw new Error(msg);
             }
+
+            navigate("/danh-sach-album");
+
         } catch (error) {
             setError(error.message);
             setIsSubmitting(false);
         }
     };
 
+    if (isLoading) {
+        return (
+            <Container className="mt-4 text-center">
+                <Spinner animation="border" variant="primary" />
+                <p>Loading...</p>
+            </Container>
+        );
+    }
+
     const isIdInvalid = artistId !== "" && parseInt(artistId) <= 0;
 
     return (
         <Container  className="mt-4 mb-5">
-            <h1>Add new album</h1>
+            <h1>{isEditMode ? "Edit Album" : "Add New Album"}</h1>
+
             {error && <Alert variant="danger">{error}</Alert>}
+
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
                     <Form.Label>Artist ID</Form.Label>
@@ -93,21 +134,28 @@ export function AlbumForm() {
                         type="submit"
                         disabled={isSubmitting || title.trim() === ""}
                     >
-                        {isSubmitting ? <Spinner size="sm" animation="border" /> : "Save"}
+                        {isSubmitting ? <Spinner size="sm" animation="border" /> : (isEditMode ? "Update" : "Save")}
                     </Button>
 
-                    <Button
-                        variant="secondary"
-                        size="sm"
-                        type="reset"
-                    >
-                        Reset
-                    </Button>
+                    {!isEditMode && (
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            type="reset"
+                            className="me-2"
+                            onClick={() => {
+                                setTitle("");
+                                setArtistId("");
+                                setError(null);
+                            }}
+                        >
+                            Reset
+                        </Button>
+                    )}
 
                     <Button
                         variant="outline-secondary"
                         size="sm"
-                        className="ms-2"
                         as={Link} to="/danh-sach-album"
                     >
                         Back to List

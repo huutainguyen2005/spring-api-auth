@@ -58,7 +58,7 @@ public class ArtistServiceImpl implements IArtistService {
 
                     return toResponseDTO(updatedArtist);
                 })
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException("Artist not found with ID: " + artistId));
     }
 
     @Override

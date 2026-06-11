@@ -52,14 +52,11 @@ public class GenreServiceImpl implements IGenreService {
     public GenreResponseDTO update(Long genreId, Genre genreInput) {
 
         Genre genre = genreRepository.findById(genreId)
-                .orElse(null);
-
-        if (genre == null) {
-            return null;
-        }
+                .orElseThrow(() -> new ResourceNotFoundException("Genre not found with ID: " + genreId));
 
         genre.setName(genreInput.getName());
         Genre updatedGenre = genreRepository.save(genre);
+
         return toResponseDTO(updatedGenre);
     }
 

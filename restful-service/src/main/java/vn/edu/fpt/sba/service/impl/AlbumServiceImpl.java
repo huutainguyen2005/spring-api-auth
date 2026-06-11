@@ -59,28 +59,22 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     @Override
-    public AlbumDetailResponseDTO update(Long albumId, Album albumInput) {
+    public AlbumDetailResponseDTO update(Long albumId, AlbumRequestDTO request) {
 
-        return albumRepository.findById(albumId)
-                .map(found -> {
+        Album found = albumRepository.findById(albumId)
+                .orElseThrow(() -> new ResourceNotFoundException("No albums found with this ID!"));
 
-                    found.setTitle(albumInput.getTitle());
+        found.setTitle(request.title());
 
-                    if (albumInput.getArtist() != null) {
+        Long artistId = request.artistId();
 
-                        Long artistId = albumInput.getArtist().getArtistId();
+        Artist artist = artistRepository.findById(artistId)
+                .orElseThrow(() -> new ResourceNotFoundException("Artist ID does not exist or has been deleted!"));
 
-                        Artist artist = artistRepository.findById(artistId)
-                                .orElse(null);
+        found.setArtist(artist);
 
-                        found.setArtist(artist);
-                    }
-
-                    Album updatedAlbum = albumRepository.save(found);
-
-                    return toDetailResponseDTO(updatedAlbum);
-                })
-                .orElse(null);
+        Album updatedAlbum = albumRepository.save(found);
+        return toDetailResponseDTO(updatedAlbum);
     }
 
     @Override

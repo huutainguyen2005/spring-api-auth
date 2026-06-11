@@ -18,7 +18,7 @@ public interface IAlbumService {
 
     AlbumDetailResponseDTO save(AlbumRequestDTO albumRequestDTO);
 
-    AlbumDetailResponseDTO update(Long albumId, Album albumInput);
+    AlbumDetailResponseDTO update(Long albumId, AlbumRequestDTO request);
 
     void delete(Long artistId);
 }

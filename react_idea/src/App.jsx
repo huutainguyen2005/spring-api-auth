@@ -25,16 +25,19 @@ function App() {
                             {/* Artist Route */}
                             <Route path="/danh-sach-nghe-si" element={<ArtistList/>}/>
                             <Route path="/them-moi-nghe-si" element={<ArtistForm/>}/>
+                            <Route path="/chinh-sua-nghe-si/:artistId" element={<ArtistForm/>}/>
                             <Route path="/xoa-nghe-si/:artistId" element={<ArtistDelete/>}/>
 
                             {/* Album Route */}
                             <Route path="/danh-sach-album" element={<AlbumList/>}/>
                             <Route path="/them-moi-album" element={<AlbumForm/>}/>
+                            <Route path="/chinh-sua-album/:albumId" element={<AlbumForm/>}/>
                             <Route path="/xoa-album/:albumId" element={<AlbumDelete/>}/>
 
                             {/* Genre Route */}
                             <Route path="/danh-sach-the-loai" element={<GenreList/>}/>
                             <Route path="/them-moi-the-loai" element={<GenreForm/>}/>
+                            <Route path="/chinh-sua-the-loai/:genreId" element={<GenreForm/>}/>
                             <Route path="/xoa-the-loai/:genreId" element={<GenreDelete/>}/>
 
                         </Routes>

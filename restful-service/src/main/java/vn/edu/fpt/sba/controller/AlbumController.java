@@ -90,11 +90,11 @@ public class AlbumController {
     @Operation(summary = "Update album", description = "This API will update an album by its ID")
     public ResponseEntity<AlbumDetailResponseDTO> updateAlbum(
             @PathVariable Long albumId,
-            @RequestBody Album album
+            @RequestBody AlbumRequestDTO request
     ) {
 
         AlbumDetailResponseDTO updatedAlbum =
-                albumService.update(albumId, album);
+                albumService.update(albumId, request);
 
         if (updatedAlbum == null) {
             return ResponseEntity.notFound().build();
