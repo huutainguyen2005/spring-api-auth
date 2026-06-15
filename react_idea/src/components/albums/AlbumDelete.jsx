@@ -98,7 +98,7 @@ export function AlbumDelete() {
                             <Modal.Title className="text-danger">Confirm Delete</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            Are you sure you want to delete the album <strong>{album.title}</strong>?
+                            Are you sure you want to delete the album <strong>{album.title}</strong> with ID <strong>{album.id}</strong> ?
                             This action cannot be undone.
                         </Modal.Body>
                         <Modal.Footer>

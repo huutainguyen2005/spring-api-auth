@@ -98,7 +98,7 @@ export function GenreDelete() {
                             <Modal.Title className="text-danger">Confirm Delete</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            Are you sure you want to delete the genre <strong>{genre.name}</strong>?
+                            Are you sure you want to delete the genre <strong>{genre.name}</strong> with ID <strong>{genre.id}</strong> ?
                             This action cannot be undone.
                         </Modal.Body>
                         <Modal.Footer>

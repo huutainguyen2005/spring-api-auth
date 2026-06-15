@@ -100,7 +100,7 @@ export function ArtistDelete() {
                             <Modal.Title className="text-danger">Confirm Delete</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            Are you sure you want to delete the artist <strong>{artist.name}</strong>?
+                            Are you sure you want to delete the artist <strong>{artist.name}</strong> with ID <strong>{artist.id}</strong> ?
                             This action cannot be undone.
                         </Modal.Body>
                         <Modal.Footer>
