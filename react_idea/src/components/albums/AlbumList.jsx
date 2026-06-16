@@ -53,11 +53,15 @@ function AlbumTable({albumList}) {
 
 export function AlbumList() {
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
     //state albums
     const [albums, setAlbums] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+
     const [currentPage, setCurrentPage] = useState(1);
+    const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
     const [jumpPage, setJumpPage] = useState("");
 
@@ -68,7 +72,7 @@ export function AlbumList() {
         const loadData = async () => {
             setIsLoading(true);
             try {
-                const res = await fetch(`http://localhost:8080/api/v1/albums?page=${currentPage}&size=10`);
+                const res = await fetch(`${API_BASE_URL}/api/v1/albums?page=${currentPage}&size=${size}`);
                 if (!res.ok) {
                     throw new Error(`Network error or server not responding (${res.status})!`);
                 }
@@ -82,7 +86,7 @@ export function AlbumList() {
             }
         }
             loadData().catch(console.error);
-    }, [currentPage]);
+    }, [API_BASE_URL, currentPage, size]);
 
     const handleInputChange = (e) => {
         const val = e.target.value;

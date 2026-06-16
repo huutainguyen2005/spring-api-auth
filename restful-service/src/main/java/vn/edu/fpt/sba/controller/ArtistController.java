@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import vn.edu.fpt.sba.dto.response.PageResponseDTO;
 import vn.edu.fpt.sba.entity.Artist;
 import vn.edu.fpt.sba.exception.ApiError;
 import vn.edu.fpt.sba.exception.ExampleArtistException;
+import vn.edu.fpt.sba.exception.ResourceNotFoundException;
 import vn.edu.fpt.sba.service.IArtistService;
 
 import java.util.List;
@@ -82,11 +84,13 @@ public class ArtistController {
     })
     public ArtistDetailResponseDTO findById(@PathVariable Long artistId) {
 
-        if (artistId == 79) {
-            throw new ExampleArtistException();
+        ArtistDetailResponseDTO artistDetailResponseDTO = artistService.findById(artistId);
+
+        if(artistDetailResponseDTO == null) {
+            throw new ResourceNotFoundException("Artist not found");
         }
 
-        return artistService.findById(artistId);
+        return ResponseEntity.ok(artistDetailResponseDTO).getBody();
     }
 
     @PostMapping

@@ -3,6 +3,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 
 export function GenreForm() {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
     const { genreId } = useParams();
     const isEditMode = Boolean(genreId);
@@ -17,7 +18,7 @@ export function GenreForm() {
         if (isEditMode) {
             const fetchGenre = async () => {
                 try {
-                    const res = await fetch(`http://localhost:8080/api/v1/genres/${genreId}`);
+                    const res = await fetch(`${API_BASE_URL}/api/v1/genres/${genreId}`);
                     if (!res.ok) throw new Error(`Not found genre with ID ${genreId}!`);
                     const data = await res.json();
                     setName(data.name);

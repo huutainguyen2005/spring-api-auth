@@ -3,6 +3,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 
 export function AlbumForm() {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     const { albumId } = useParams();
     const isEditMode = Boolean(albumId);
@@ -18,7 +19,7 @@ export function AlbumForm() {
         if (isEditMode) {
             const fetchAlbum = async () => {
                 try {
-                    const res = await fetch(`http://localhost:8080/api/v1/albums/${albumId}`);
+                    const res = await fetch(`${API_BASE_URL}/api/v1/albums/${albumId}`);
                     if (!res.ok) throw new Error(`Not found album with ID ${albumId}!`);
                     const data = await res.json();
                     setTitle(data.title);

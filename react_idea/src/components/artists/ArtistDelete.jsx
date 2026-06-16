@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 export function ArtistDelete() {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
     const { artistId } = useParams();
     const navigate = useNavigate();
 
@@ -17,7 +19,7 @@ export function ArtistDelete() {
     useEffect(() => {
         const fetchArtist = async () => {
             try {
-                const res = await fetch(`http://localhost:8080/api/v1/artists/${artistId}`);
+                const res = await fetch(`${API_BASE_URL}/api/v1/artists/${artistId}`);
                 if (!res.ok) throw new Error(`Not found artist with ID ${artistId}!`);
                 const data = await res.json();
                 setArtist(data);

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 export function AlbumDelete() {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
     const { albumId } = useParams();
     const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ export function AlbumDelete() {
     useEffect(() => {
         const fetchAlbum = async () => {
             try {
-                const res = await fetch(`http://localhost:8080/api/v1/albums/${albumId}`);
+                const res = await fetch(`${API_BASE_URL}/api/v1/albums/${albumId}`);
                 if (!res.ok) throw new Error(`Not found album with ID ${albumId}!`);
                 const data = await res.json();
                 setAlbums(data);

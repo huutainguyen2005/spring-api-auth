@@ -1,5 +1,5 @@
 import {Alert, Button, Container, Form, Pagination, Spinner, Table} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import {useState, useEffect} from "react";
 
 function ArtistTableRow({ artist }) {
@@ -51,6 +51,7 @@ function ArtistTable({artistList}) {
 }
 
 export function ArtistList() {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
     // State artists
     const [artists, setArtists] = useState([]);
@@ -58,18 +59,26 @@ export function ArtistList() {
     const [error, setError] = useState(null);
 
     // State phân trang
-    const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = parseInt(searchParams.get("page")) || 1;
+    const size = parseInt(searchParams.get("size")) || 10
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
     const [jumpPage, setJumpPage] = useState("");
 
     // Call API -> get artist list
     // Inline arrow fn
 
+    const handlePageChange = (newPage) => {
+        setSearchParams({ page: newPage, size: size });
+    };
+
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
             try {
-                const res = await fetch(`http://localhost:8080/api/v1/artists?page=${currentPage}&size=10`);
+                const res = await fetch(`${API_BASE_URL}/api/v1/artists?page=${currentPage}&size=${size}`);
                 if (!res.ok) {
                     throw new Error(`Network error or server not responding (${res.status})!`);
                 }
@@ -83,7 +92,7 @@ export function ArtistList() {
             }
         };
             loadData().catch(console.error);
-    }, [currentPage]); // Chạy 1 lần duy nhất khi component được mount
+    }, [API_BASE_URL, currentPage, size]); // Chạy 1 lần duy nhất khi component được mount
 
     const handleInputChange = (e) => {
         const val = e.target.value;
@@ -111,7 +120,7 @@ export function ArtistList() {
         if (e.key === 'Enter') {
             // Chỉ chuyển trang nếu ô input không bị bỏ trống
             if (jumpPage !== "") {
-                setCurrentPage(Number(jumpPage));
+                handlePageChange(Number(jumpPage));
             }
         }
     };
@@ -121,7 +130,7 @@ export function ArtistList() {
     if (totalPages <= 10) {
         for (let number = 1; number <= totalPages; number++) {
             paginationItems.push(
-                <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
                     {number}
                 </Pagination.Item>
             );
@@ -131,38 +140,38 @@ export function ArtistList() {
         if (currentPage <= 5) {
             for (let number = 1; number <= 7; number++) {
                 paginationItems.push(
-                    <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                    <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
                         {number}
                     </Pagination.Item>
                 );
             }
             paginationItems.push(<Pagination.Ellipsis key="ellipsis-end" disabled />);
-            paginationItems.push(<Pagination.Item key={totalPages} onClick={() => setCurrentPage(totalPages)}>{totalPages}</Pagination.Item>);
+            paginationItems.push(<Pagination.Item key={totalPages} onClick={() => handlePageChange(totalPages)}>{totalPages}</Pagination.Item>);
         }
         // Đang ở những trang cuối (VD: < 1 ... 22 23 24 25 26 27 28 >)
         else if (currentPage >= totalPages - 4) {
-            paginationItems.push(<Pagination.Item key={1} onClick={() => setCurrentPage(1)}>1</Pagination.Item>);
+            paginationItems.push(<Pagination.Item key={1} onClick={() => handlePageChange(1)}>1</Pagination.Item>);
             paginationItems.push(<Pagination.Ellipsis key="ellipsis-start" disabled />);
             for (let number = totalPages - 6; number <= totalPages; number++) {
                 paginationItems.push(
-                    <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                    <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
                         {number}
                     </Pagination.Item>
                 );
             }
         }
         else {
-            paginationItems.push(<Pagination.Item key={1} onClick={() => setCurrentPage(1)}>1</Pagination.Item>);
+            paginationItems.push(<Pagination.Item key={1} onClick={() => handlePageChange(1)}>1</Pagination.Item>);
             paginationItems.push(<Pagination.Ellipsis key="ellipsis-start" disabled />);
             for (let number = currentPage - 2; number <= currentPage + 2; number++) {
                 paginationItems.push(
-                    <Pagination.Item key={number} active={number === currentPage} onClick={() => setCurrentPage(number)}>
+                    <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
                         {number}
                     </Pagination.Item>
                 );
             }
             paginationItems.push(<Pagination.Ellipsis key="ellipsis-end" disabled />);
-            paginationItems.push(<Pagination.Item key={totalPages} onClick={() => setCurrentPage(totalPages)}>{totalPages}</Pagination.Item>);
+            paginationItems.push(<Pagination.Item key={totalPages} onClick={() => handlePageChange(totalPages)}>{totalPages}</Pagination.Item>);
         }
     }
 
@@ -191,14 +200,14 @@ export function ArtistList() {
                         <div className="d-flex justify-content-center align-items-center mt-4">
                             <Pagination className="mb-0 me-4">
                                 <Pagination.Prev
-                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                    onClick={() => handlePageChange(prev => Math.max(prev - 1, 1))}
                                     disabled={currentPage === 1}
                                 />
 
                                 {paginationItems}
 
                                 <Pagination.Next
-                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                    onClick={() => handlePageChange(prev => Math.min(prev + 1, totalPages))}
                                     disabled={currentPage === totalPages}
                                 />
                             </Pagination>

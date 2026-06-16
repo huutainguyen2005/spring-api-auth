@@ -4,6 +4,7 @@ import {FavoriteGenre} from "../genres/FavoriteGenre.jsx";
 import {useEffect, useState} from "react";
 
 export function ArtistForm() {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
     // API để create artist -> Check lại bên BE
 
@@ -30,7 +31,7 @@ export function ArtistForm() {
         if (isEditMode) {
             const fetchArtist = async () => {
                 try {
-                    const res = await fetch(`http://localhost:8080/api/v1/artists/${artistId}`);
+                    const res = await fetch(`${API_BASE_URL}/api/v1/artists/${artistId}`);
                     if (!res.ok) throw new Error(`Not found artist with ID ${artistId}!`);
                     const data = await res.json();
                     setName(data.name);

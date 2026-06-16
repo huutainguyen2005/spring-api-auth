@@ -50,6 +50,7 @@ function GenreTable({genreList}) {
 }
 
 export function GenreList() {
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
     //state genres
     const [genres, setGenres] = useState([]);
@@ -57,7 +58,8 @@ export function GenreList() {
     const [error, setError] = useState(null);
 
     // State phân trang
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
     const [jumpPage, setJumpPage] = useState("");
 
@@ -68,7 +70,7 @@ export function GenreList() {
         const loadData = async () => {
             setIsLoading(true);
             try {
-                const res = await fetch(`http://localhost:8080/api/v1/genres?page=${currentPage}&size=10`);
+                const res = await fetch(`${API_BASE_URL}/api/v1/genres?page=${currentPage}&size=${size}`);
                 if (!res.ok) {
                     throw new Error(`Network error or server not responding (${res.status})!`);
                 }
@@ -82,7 +84,7 @@ export function GenreList() {
             }
         };
             loadData().catch(console.error);
-    }, [currentPage]);
+    }, [API_BASE_URL, currentPage, size]);
 
     const handleInputChange = (e) => {
         const val = e.target.value;
