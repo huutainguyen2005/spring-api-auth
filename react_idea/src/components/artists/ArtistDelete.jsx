@@ -18,7 +18,7 @@ export function ArtistDelete() {
         const fetchArtist = async () => {
             try {
                 const res = await fetch(`http://localhost:8080/api/v1/artists/${artistId}`);
-                if (!res.ok) throw new Error(`Cannot load artist information (${res.status} Error)!`);
+                if (!res.ok) throw new Error(`Not found artist with ID ${artistId}!`);
                 const data = await res.json();
                 setArtist(data);
             } catch (err) {

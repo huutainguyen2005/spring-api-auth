@@ -19,7 +19,7 @@ export function AlbumForm() {
             const fetchAlbum = async () => {
                 try {
                     const res = await fetch(`http://localhost:8080/api/v1/albums/${albumId}`);
-                    if (!res.ok) throw new Error("Cannot to load album information!");
+                    if (!res.ok) throw new Error(`Not found album with ID ${albumId}!`);
                     const data = await res.json();
                     setTitle(data.title);
                     setArtistId(data.artist?.artistId || data.artistId || "");

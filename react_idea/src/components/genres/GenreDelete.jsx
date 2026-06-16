@@ -17,7 +17,7 @@ export function GenreDelete() {
         const fetchGenre = async () => {
             try {
                 const res = await fetch(`http://localhost:8080/api/v1/genres/${genreId}`);
-                if (!res.ok) throw new Error(`Cannot load genre information (${res.status} Error)!`);
+                if (!res.ok) throw new Error(`Not found genre with ID ${genreId}!!`);
                 const data = await res.json();
                 setGenres(data);
             } catch (err) {

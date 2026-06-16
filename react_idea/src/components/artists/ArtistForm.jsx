@@ -31,7 +31,7 @@ export function ArtistForm() {
             const fetchArtist = async () => {
                 try {
                     const res = await fetch(`http://localhost:8080/api/v1/artists/${artistId}`);
-                    if (!res.ok) throw new Error("Cannot to load artist information!");
+                    if (!res.ok) throw new Error(`Not found artist with ID ${artistId}!`);
                     const data = await res.json();
                     setName(data.name);
                 } catch (err) {
