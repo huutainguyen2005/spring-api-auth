@@ -1,121 +1,96 @@
-import { Alert, Button, Container, Form, InputGroup, Spinner, Modal } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import {Alert, Button, Container, Form} from "react-bootstrap";
+import {useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+
+function ArtistDeletePage({children}) {
+    return (
+        <Container>
+            <h1>Delete artist</h1>
+            {children}
+        </Container>
+    );
+}
 
 export function ArtistDelete() {
-    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-
-    const { artistId } = useParams();
+    const [artist, setArtist] = useState({});
+    const [error, setError] = useState(null);
+    const [notFound, setNotFound] = useState(false);
+    const {id} = useParams();
     const navigate = useNavigate();
 
-    const [artist, setArtist] = useState({ name: "" });
-    const [isLoading, setIsLoading] = useState(true);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [error, setError] = useState(null);
-
-    const [showModal, setShowModal] = useState(false);
-
-    // Gọi API lấy thông tin Artist để hiển thị lên Form (Read-only)
-    useEffect(() => {
-        const fetchArtist = async () => {
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/v1/artists/${artistId}`);
-                if (!res.ok) throw new Error(`Not found artist with ID ${artistId}!`);
-                const data = await res.json();
-                setArtist(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchArtist().catch(console.error);
-    }, [artistId]);
-
-    // Hàm xử lý gọi API Xóa (chỉ chạy khi người dùng bấm Yes trong Pop-up)
-    const handleDelete = async () => {
-        setShowModal(false); // Ẩn pop-up đi
-        setIsDeleting(true);
+    const handleDelete = async (e) => {
+        e.preventDefault();
         try {
-            const res = await fetch(`http://localhost:8080/api/v1/artists/${artistId}`, {
-                method: "DELETE",
+            const res = await fetch(`http://localhost:8080/api/v1/artists/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
-
-            if (res.ok || res.status === 204) {
-                navigate("/danh-sach-nghe-si");
-            } else {
-                throw new Error("Delete failed! Please check the server again.");
+            if (res.status === 204) {
+                navigate('/danh-sach-nghe-si');
             }
-        } catch (err) {
-            setError(err.message);
-            setIsDeleting(false);
+        } catch (ex) {
+            setError(ex.message);
         }
     };
 
+    // Call GET api endpoint để lấy thông tin chi tiết của Artist đang cần Delete
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v1/artists/${id}`)
+            .then(res => {
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        setNotFound(true);
+                    }
+                    throw new Error('Error');
+                }
+                return res.json();
+            })
+            .then(data => {
+                setArtist(data);
+                setNotFound(false);
+            })
+            .catch(err => {
+                setError(err.message)
+            });
+    }, [id]);
+
+    if (notFound) {
+        return (
+            <ArtistDeletePage>
+                <Alert variant='danger'>Artist with id {id} not found.</Alert>
+                <Button>Back to list</Button>
+            </ArtistDeletePage>
+        );
+    }
+    /*
+     notfound
+     <Container>
+        <h1>Delete artist</h1>
+        <Alert>Ko tim thay artist voi id ...
+        button back to list
+    </Container>
+
+
+     <Container>
+        <h1>Delete artist</h1>
+        <p>Are you sure to delete artist {artist.name} with {artist.id}</p>
+        button xoa + button back to list
+    </Container>
+    props
+    <ArtistDeletePage />
+
+
+     */
+
     return (
-        <Container className="mt-4 mb-5">
-            <h1>Delete Artist</h1>
-            {error && <Alert variant="danger">{error}</Alert>}
-
-            {isLoading ? (
-                <div className="text-center"><Spinner animation="border" /></div>
-            ) : (
-                <>
-                    <Form>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Artist ID</Form.Label>
-                            <InputGroup>
-                                <Form.Control type="text" value={artistId} readOnly disabled />
-                            </InputGroup>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Name</Form.Label>
-                            <InputGroup>
-                                <Form.Control type="text" value={artist.name || ""} readOnly disabled />
-                            </InputGroup>
-                        </Form.Group>
-
-                        <div className="d-flex align-items-center mt-4">
-                            <Button
-                                variant="danger"
-                                size="sm"
-                                className="me-2"
-                                onClick={() => setShowModal(true)}
-                                disabled={isDeleting}
-                            >
-                                {isDeleting ? <Spinner size="sm" animation="border" /> : "Delete"}
-                            </Button>
-
-                            <Button
-                                variant="outline-secondary"
-                                size="sm"
-                                as={Link} to="/danh-sach-nghe-si"
-                            >
-                                Back to List
-                            </Button>
-                        </div>
-                    </Form>
-
-                    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-                        <Modal.Header closeButton>
-                            <Modal.Title className="text-danger">Confirm Delete</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Are you sure you want to delete the artist <strong>{artist.name}</strong> with ID <strong>{artist.id}</strong> ?
-                            This action cannot be undone.
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={() => setShowModal(false)}>
-                                Cancel
-                            </Button>
-                            <Button variant="danger" onClick={handleDelete}>
-                                Yes, Delete
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                </>
-            )}
-        </Container>
+        <ArtistDeletePage>
+            <p>Are you sure to delete artist {artist.name} with {artist.id}</p>
+            <Form onSubmit={handleDelete}>
+                <Button type='submit'>Delete</Button>
+                <Button>Back to list</Button>
+            </Form>
+        </ArtistDeletePage>
     );
 }

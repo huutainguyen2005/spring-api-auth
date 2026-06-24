@@ -1,47 +1,41 @@
-import {Navbar, Nav, NavDropdown, Container} from 'react-bootstrap';
-import {Link} from "react-router-dom";
+import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Link} from 'react-router-dom';
 
-// Class Component -> Legacy code
-// class Header extends Component {}
+// Class component -> Legacy code
+// class Header extends Component
+
+// Logic fn
+// Naming convention -> camelCase()
+// function calculateSubTotal() {
+//     return ...
+// }
 
 // Functional Component
+// Naming convention -> PascalCase | UpperCamelCase cho tên của Component
 export function Header() {
     return (
-        <Navbar bg="dark" variant="dark" expand="lg">
+        <Navbar>
             <Container>
                 <Navbar.Brand href={"#"}>FPT Music Store</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
-                        {/* Dropdown Artists */}
-                        <NavDropdown title="Artists" id="artists-dropdown">
-                            <NavDropdown.Item as={Link} to="/danh-sach-nghe-si">List all artists</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/them-moi-nghe-si">Add new artists</NavDropdown.Item>
+                <Navbar.Collapse>
+                    <Nav className={"me-auto"}>
+                        <NavDropdown title={"Artists"}>
+                            <NavDropdown.Item as={Link} to={'/danh-sach-nghe-si'}>Artists list</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to={'/them-moi-nghe-si'}>Add new</NavDropdown.Item>
                         </NavDropdown>
-
-                        {/* Dropdown Albums */}
-                        <NavDropdown title="Albums" id="albums-dropdown">
-                            <NavDropdown.Item as={Link} to="/danh-sach-album">List all albums</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/them-moi-album">Add new album</NavDropdown.Item>
+                        <NavDropdown title={"Albums"}>
+                            <NavDropdown.Item>Albums list</NavDropdown.Item>
+                            <NavDropdown.Item>Add new</NavDropdown.Item>
                         </NavDropdown>
-
-                        {/* Dropdown Genres */}
-                        <NavDropdown title="Genres" id="genres-dropdown">
-                            <NavDropdown.Item as={Link} to="/danh-sach-the-loai">List all genre</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/them-moi-the-loai">Add new genre</NavDropdown.Item>
+                        <NavDropdown title={"Genres"}>
+                            <NavDropdown.Item>Genres list</NavDropdown.Item>
+                            <NavDropdown.Item>Add new</NavDropdown.Item>
                         </NavDropdown>
+                    </Nav>
+                    <Nav>
+                        Login
                     </Nav>
                 </Navbar.Collapse>
             </Container>
-        </Navbar>
-    );
-}
-
-export function Footer() {
-    return (
-        <footer className="bg-dark text-white text-center py-4 mt-auto">
-            <p className="mb-1">FPTU Cantho</p>
-            <p className="mb-0">Music Store &copy; 2026</p>
-        </footer>
-    );
+        </Navbar>);
 }
