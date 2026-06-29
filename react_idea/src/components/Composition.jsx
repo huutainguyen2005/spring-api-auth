@@ -1,5 +1,7 @@
 import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link} from 'react-router-dom';
+import {useContext} from "react";
+import {useTheme} from "../contexts/ThemeContext.jsx";
 
 // Class component -> Legacy code
 // class Header extends Component
@@ -13,8 +15,14 @@ import {Link} from 'react-router-dom';
 // Functional Component
 // Naming convention -> PascalCase | UpperCamelCase cho tên của Component
 export function Header() {
+    // use context <- consume ---  theme
+    // const { theme, toggle } = useContext(ThemeContext)
+    const { theme, toggle } = useTheme();
+
+    console.log(theme);
+
     return (
-        <Navbar>
+        <Navbar bg={theme} variant={theme}>
             <Container>
                 <Navbar.Brand href={"#"}>FPT Music Store</Navbar.Brand>
                 <Navbar.Collapse>

@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
 import {apiInstance} from "../ApiCore.jsx";
+import {getList} from "../../api/artistApi.js";
 
 // AXIOS
 
@@ -59,26 +60,6 @@ function ArtistTable({list}) {
     );
 }
 
-// Array of Objects
-const artistList = [
-    {
-        id: 1,
-        name: 'AC/DC'
-    },
-    {
-        id: 2,
-        name: 'Dan Nguyen'
-    },
-    {
-        id: 3,
-        name: 'Bang Kieu'
-    },
-    {
-        id: 4,
-        name: 'Dan Truong'
-    },
-];
-
 export function ArtistList() {
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
     // state artists
@@ -105,18 +86,29 @@ export function ArtistList() {
     // Inline arrow fn
     useEffect(() => {
         // code
-        fetch(`${API_BASE_URL}/api/v1/artists?page=${page}&size=${size}`)
-            .then(res => {
-                return res.json()
-            })
-            .then(data => {
-                // setPage()
-                // setSize()
-                setArtists(data.content)
-                setTotalPages(data.totalPages);
-            });
+        // fetch(`${API_BASE_URL}/api/v1/artists?page=${page}&size=${size}`)
+        //     .then(res => {
+        //         return res.json()
+        //     })
+        //     .then(data => {
+        //         // setPage()
+        //         // setSize()
+        //         setArtists(data.content)
+        //         setTotalPages(data.totalPages);
+        //     });
+        getList(page, size).then(resp => {
+            setArtists(resp.data.content);
+            setTotalPages(resp.data.totalPages);
+        });
 
-        await apiInstance.get(`/api/v1/artists?page=${page}&size=${size}`)
+        // TASK:
+        // Chuyển các logic fetch API sang axios
+        // Xem ArtistForm.jsx
+        // getArtistById(id)
+        // createArtist()
+        // updateArtist(id, {})
+        // Xem ArtistDelete.jsx
+        // deleteArtist(id)
 
         // code
     }, [API_BASE_URL, page, size]);
