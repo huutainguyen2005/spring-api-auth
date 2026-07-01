@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.sba.configuration.GenericConfig;
+import vn.edu.fpt.sba.dto.request.GenreRequestDTO;
 import vn.edu.fpt.sba.dto.response.ArtistDetailResponseDTO;
 import vn.edu.fpt.sba.dto.response.GenreResponseDTO;
 import vn.edu.fpt.sba.dto.response.PageResponseDTO;
@@ -78,17 +79,21 @@ public class GenreController {
     @PostMapping
     @Operation(summary = "Create genre", description = "This API will create a new genre")
     @ResponseStatus(HttpStatus.CREATED)
-    public GenreResponseDTO createGenre(@Valid @RequestBody GenreResponseDTO genreResponseDTO) {
+    public GenreResponseDTO createGenre(@Valid @RequestBody GenreRequestDTO genreRequestDTO) {
         Genre genre = new Genre();
-        genre.setName(genreResponseDTO.name());
+        genre.setName(genreRequestDTO.name());
+        genre.setDescription(genreRequestDTO.description());
+        genre.setPopularityScore(genreRequestDTO.popularityScore());
+        genre.setIsActive(genreRequestDTO.isActive());
+
         return genreService.save(genre);
     }
 
     @PutMapping("/{genreId}")
     @Operation(summary = "Update genre", description = "This API will update a genre by its ID")
     public ResponseEntity<GenreResponseDTO> updateGenre(@PathVariable Long genreId,
-                                                        @RequestBody Genre genre) {
-        GenreResponseDTO updatedGenre = genreService.update(genreId, genre);
+                                                        @RequestBody GenreRequestDTO genreRequestDTO) {
+        GenreResponseDTO updatedGenre = genreService.update(genreId, genreRequestDTO);
 
         if (updatedGenre == null) {
             return ResponseEntity.notFound().build();

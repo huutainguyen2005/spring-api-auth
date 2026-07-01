@@ -15,8 +15,6 @@ public record GenreRequestDTO(
         String description,
         @NotNull(message = "Popularity score is required")
         BigDecimal popularityScore,
-        Boolean isActive,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        Boolean isActive
 ) {
 }

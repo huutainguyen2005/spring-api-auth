@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import vn.edu.fpt.sba.dto.request.GenreRequestDTO;
 import vn.edu.fpt.sba.dto.response.GenreResponseDTO;
 import vn.edu.fpt.sba.entity.Genre;
 import vn.edu.fpt.sba.exception.ResourceNotFoundException;
@@ -49,12 +50,16 @@ public class GenreServiceImpl implements IGenreService {
     }
 
     @Override
-    public GenreResponseDTO update(Long genreId, Genre genreInput) {
+    public GenreResponseDTO update(Long genreId, GenreRequestDTO genreRequestDTO) {
 
         Genre genre = genreRepository.findById(genreId)
                 .orElseThrow(() -> new ResourceNotFoundException("Genre not found with ID: " + genreId));
 
-        genre.setName(genreInput.getName());
+        genre.setName(genreRequestDTO.name());
+        genre.setDescription(genreRequestDTO.description());
+        genre.setPopularityScore(genreRequestDTO.popularityScore());
+        genre.setIsActive(genreRequestDTO.isActive());
+
         Genre updatedGenre = genreRepository.save(genre);
 
         return toResponseDTO(updatedGenre);

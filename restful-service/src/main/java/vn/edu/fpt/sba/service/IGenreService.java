@@ -2,6 +2,7 @@ package vn.edu.fpt.sba.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import vn.edu.fpt.sba.dto.request.GenreRequestDTO;
 import vn.edu.fpt.sba.dto.response.ArtistDetailResponseDTO;
 import vn.edu.fpt.sba.dto.response.ArtistResponseDTO;
 import vn.edu.fpt.sba.dto.response.GenreResponseDTO;
@@ -20,7 +21,7 @@ public interface IGenreService {
 
     GenreResponseDTO save(Genre genre);
 
-    GenreResponseDTO update(Long genreId, Genre genreInput);
+    GenreResponseDTO update(Long genreId, GenreRequestDTO genreRequestDTO);
 
     void delete(Long genreId);
 }
