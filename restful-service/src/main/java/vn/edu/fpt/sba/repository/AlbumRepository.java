@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import vn.edu.fpt.sba.entity.Album;
 
 @Repository
-public interface AlbumRepository extends JpaRepository<Album, Long> {
+public interface AlbumRepository extends JpaRepository<Album, Integer> {
 }

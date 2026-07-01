@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record GenreResponseDTO(
-        Long genreId,
+        Integer genreId,
         String name,
         String description,
         BigDecimal popularityScore,

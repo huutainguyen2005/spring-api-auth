@@ -1,7 +1,6 @@
 package vn.edu.fpt.sba.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,28 +8,21 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import vn.edu.fpt.sba.configuration.GenericConfig;
 import vn.edu.fpt.sba.dto.request.ArtistRequestDTO;
 import vn.edu.fpt.sba.dto.response.ArtistDetailResponseDTO;
 import vn.edu.fpt.sba.dto.response.ArtistResponseDTO;
 import vn.edu.fpt.sba.dto.response.PageResponseDTO;
 import vn.edu.fpt.sba.entity.Artist;
 import vn.edu.fpt.sba.exception.ApiError;
-import vn.edu.fpt.sba.exception.ExampleArtistException;
 import vn.edu.fpt.sba.exception.ResourceNotFoundException;
 import vn.edu.fpt.sba.service.IArtistService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/artists")
@@ -82,7 +74,7 @@ public class ArtistController {
                     )
             )
     })
-    public ArtistDetailResponseDTO findById(@PathVariable Long artistId) {
+    public ArtistDetailResponseDTO findById(@PathVariable Integer artistId) {
 
         ArtistDetailResponseDTO artistDetailResponseDTO = artistService.findById(artistId);
 
@@ -107,7 +99,7 @@ public class ArtistController {
     @PutMapping("/{artistId}")
     @Operation(summary = "Update artist", description = "This API will update an artist by its ID")
     public ResponseEntity<ArtistResponseDTO> updateArtist(
-            @PathVariable Long artistId,
+            @PathVariable Integer artistId,
             @RequestBody Artist artist) {
 
         ArtistResponseDTO updatedArtist =
@@ -123,7 +115,7 @@ public class ArtistController {
     @DeleteMapping("/{artistId}")
     @Operation(summary = "Delete artist", description = "This API will delete an artist by its ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteArtist(@PathVariable Long artistId) {
+    public ResponseEntity<Void> deleteArtist(@PathVariable Integer artistId) {
         artistService.delete(artistId);
         return ResponseEntity.noContent().build();
     }

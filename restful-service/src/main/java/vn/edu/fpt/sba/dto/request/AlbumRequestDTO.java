@@ -10,6 +10,6 @@ public record AlbumRequestDTO(
         String title,
 
         @NotNull(message = "Artist ID is required")
-        Long artistId) {
+        Integer artistId) {
 
 }

@@ -1,7 +1,7 @@
 package vn.edu.fpt.sba.dto.response;
 
 public record AlbumDetailResponseDTO(
-        Long albumId,
+        Integer albumId,
         String title,
         ArtistResponseDTO artist) {
 

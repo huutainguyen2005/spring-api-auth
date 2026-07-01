@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,21 +21,27 @@ public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long genreId;
+    @Column(name = "GenreId")
+    Integer genreId;
 
+    @Column(name = "Name")
     String name;
 
+    @Column(name = "Description")
     String description;
 
+    @Column(name = "PopularityScore", nullable = false)
+    @ColumnDefault("50")
     BigDecimal popularityScore;
 
     @Column(nullable = false)
     Boolean isActive;
 
     @CreationTimestamp
-    @Column(updatable = false, nullable = false)
+    @Column(name = "CreatedAt", updatable = false, nullable = false)
     LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(name = "UpdatedAt")
     LocalDateTime updatedAt;
 }

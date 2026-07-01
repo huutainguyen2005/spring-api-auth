@@ -12,11 +12,11 @@ public interface IArtistService {
 
     Page<ArtistDetailResponseDTO> findAll(Pageable pageable);
 
-    ArtistDetailResponseDTO findById(Long artistId);
+    ArtistDetailResponseDTO findById(Integer artistId);
 
     ArtistResponseDTO save(Artist artist);
 
-    ArtistResponseDTO update(Long artistId, Artist artist);
+    ArtistResponseDTO update(Integer artistId, Artist artist);
 
-    void delete(Long artistId);
+    void delete(Integer artistId);
 }

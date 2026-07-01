@@ -29,7 +29,7 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     @Override
-    public AlbumDetailResponseDTO findById(Long albumId) {
+    public AlbumDetailResponseDTO findById(Integer albumId) {
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
@@ -59,14 +59,14 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     @Override
-    public AlbumDetailResponseDTO update(Long albumId, AlbumRequestDTO request) {
+    public AlbumDetailResponseDTO update(Integer albumId, AlbumRequestDTO request) {
 
         Album found = albumRepository.findById(albumId)
                 .orElseThrow(() -> new ResourceNotFoundException("No albums found with this ID!"));
 
         found.setTitle(request.title());
 
-        Long artistId = request.artistId();
+        Integer artistId = request.artistId();
 
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new ResourceNotFoundException("Artist ID does not exist or has been deleted!"));
@@ -78,7 +78,7 @@ public class AlbumServiceImpl implements IAlbumService {
     }
 
     @Override
-    public void delete(Long albumId) {
+    public void delete(Integer albumId) {
         albumRepository.deleteById(albumId);
     }
 

@@ -17,11 +17,11 @@ public interface IGenreService {
 
     Page<GenreResponseDTO> getAllGenres(Pageable pageable);
 
-    GenreResponseDTO findById(Long genreId);
+    GenreResponseDTO findById(Integer genreId);
 
     GenreResponseDTO save(Genre genre);
 
-    GenreResponseDTO update(Long genreId, GenreRequestDTO genreRequestDTO);
+    GenreResponseDTO update(Integer genreId, GenreRequestDTO genreRequestDTO);
 
-    void delete(Long genreId);
+    void delete(Integer genreId);
 }

@@ -31,7 +31,7 @@ public class GenreServiceImpl implements IGenreService {
     }
 
     @Override
-    public GenreResponseDTO findById(Long genreId) {
+    public GenreResponseDTO findById(Integer genreId) {
 
         Genre genre = genreRepository.findById(genreId)
                 .orElseThrow(() ->
@@ -50,7 +50,7 @@ public class GenreServiceImpl implements IGenreService {
     }
 
     @Override
-    public GenreResponseDTO update(Long genreId, GenreRequestDTO genreRequestDTO) {
+    public GenreResponseDTO update(Integer genreId, GenreRequestDTO genreRequestDTO) {
 
         Genre genre = genreRepository.findById(genreId)
                 .orElseThrow(() -> new ResourceNotFoundException("Genre not found with ID: " + genreId));
@@ -66,7 +66,7 @@ public class GenreServiceImpl implements IGenreService {
     }
 
     @Override
-    public void delete(Long genreId) {
+    public void delete(Integer genreId) {
         genreRepository.deleteById(genreId);
     }
 

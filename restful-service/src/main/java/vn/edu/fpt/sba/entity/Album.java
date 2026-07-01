@@ -18,8 +18,10 @@ public class Album {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long albumId;
+    @Column(name = "AlbumId")
+    Integer albumId;
 
+    @Column(name = "Title")
     String title;
 
     @ManyToOne

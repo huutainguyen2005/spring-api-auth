@@ -14,11 +14,11 @@ public interface IAlbumService {
 
     Page<AlbumDetailResponseDTO> getAllAlbums(Pageable pageable);
 
-    AlbumDetailResponseDTO findById(Long albumId);
+    AlbumDetailResponseDTO findById(Integer albumId);
 
     AlbumDetailResponseDTO save(AlbumRequestDTO albumRequestDTO);
 
-    AlbumDetailResponseDTO update(Long albumId, AlbumRequestDTO request);
+    AlbumDetailResponseDTO update(Integer albumId, AlbumRequestDTO request);
 
-    void delete(Long artistId);
+    void delete(Integer artistId);
 }

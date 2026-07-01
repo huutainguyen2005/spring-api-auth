@@ -27,7 +27,7 @@ public class ArtistServiceImpl implements IArtistService {
     }
 
     @Override
-    public ArtistDetailResponseDTO findById(Long artistId) {
+    public ArtistDetailResponseDTO findById(Integer artistId) {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
@@ -47,7 +47,7 @@ public class ArtistServiceImpl implements IArtistService {
     }
 
     @Override
-    public ArtistResponseDTO update(Long artistId, Artist artistInput) {
+    public ArtistResponseDTO update(Integer artistId, Artist artistInput) {
 
         return artistRepository.findById(artistId)
                 .map(found -> {
@@ -62,7 +62,7 @@ public class ArtistServiceImpl implements IArtistService {
     }
 
     @Override
-    public void delete(Long artistId) {
+    public void delete(Integer artistId) {
         artistRepository.deleteById(artistId);
     }
 

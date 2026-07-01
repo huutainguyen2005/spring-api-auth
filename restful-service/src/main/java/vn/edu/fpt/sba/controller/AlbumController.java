@@ -1,7 +1,6 @@
 package vn.edu.fpt.sba.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,16 +10,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.fpt.sba.configuration.GenericConfig;
 import vn.edu.fpt.sba.dto.request.AlbumRequestDTO;
 import vn.edu.fpt.sba.dto.response.*;
-import vn.edu.fpt.sba.entity.Album;
 import vn.edu.fpt.sba.exception.ApiError;
 import vn.edu.fpt.sba.service.IAlbumService;
 
@@ -68,7 +64,7 @@ public class AlbumController {
                     )
             )
     })
-    public ResponseEntity<AlbumDetailResponseDTO> findById(@PathVariable Long albumId) {
+    public ResponseEntity<AlbumDetailResponseDTO> findById(@PathVariable Integer albumId) {
         AlbumDetailResponseDTO album = albumService.findById(albumId);
 
         if (album == null) {
@@ -89,7 +85,7 @@ public class AlbumController {
     @PutMapping("/{albumId}")
     @Operation(summary = "Update album", description = "This API will update an album by its ID")
     public ResponseEntity<AlbumDetailResponseDTO> updateAlbum(
-            @PathVariable Long albumId,
+            @PathVariable Integer albumId,
             @RequestBody AlbumRequestDTO request
     ) {
 
@@ -106,7 +102,7 @@ public class AlbumController {
     @DeleteMapping("/{albumId}")
     @Operation(summary = "Delete album", description = "This API will delete an album")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteAlbum(@PathVariable Long albumId) {
+    public ResponseEntity<Void> deleteAlbum(@PathVariable Integer albumId) {
         albumService.delete(albumId);
         return ResponseEntity.noContent().build();
     }

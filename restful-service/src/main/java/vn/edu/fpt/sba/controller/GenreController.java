@@ -72,7 +72,7 @@ public class GenreController {
                     )
             )
     })
-    public GenreResponseDTO getGenreById(@PathVariable Long genreId) {
+    public GenreResponseDTO getGenreById(@PathVariable Integer genreId) {
         return  genreService.findById(genreId);
     }
 
@@ -91,7 +91,7 @@ public class GenreController {
 
     @PutMapping("/{genreId}")
     @Operation(summary = "Update genre", description = "This API will update a genre by its ID")
-    public ResponseEntity<GenreResponseDTO> updateGenre(@PathVariable Long genreId,
+    public ResponseEntity<GenreResponseDTO> updateGenre(@PathVariable Integer genreId,
                                                         @RequestBody GenreRequestDTO genreRequestDTO) {
         GenreResponseDTO updatedGenre = genreService.update(genreId, genreRequestDTO);
 
@@ -105,7 +105,7 @@ public class GenreController {
     @DeleteMapping("/{genreId}")
     @Operation(summary = "Delete genre", description = "This API will delete a genre by its ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteGenre(@PathVariable Long genreId) {
+    public ResponseEntity<Void> deleteGenre(@PathVariable Integer genreId) {
         genreService.delete(genreId);
         return ResponseEntity.noContent().build();
     }
