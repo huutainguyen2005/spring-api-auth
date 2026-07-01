@@ -20,10 +20,8 @@ public class Artist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ArtistId")
     Long artistId;
 
-    @Column(name = "Name")
     String name;
 
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)

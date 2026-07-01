@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -15,9 +18,17 @@ public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "GenreId")
     Long genreId;
 
-    @Column(name = "Name")
     String name;
+
+    String description;
+
+    BigDecimal popularityScore;
+
+    Boolean isActive;
+
+    LocalDateTime createdAt;
+
+    LocalDateTime updatedAt;
 }

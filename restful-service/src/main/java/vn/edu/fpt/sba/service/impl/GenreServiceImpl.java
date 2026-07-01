@@ -68,7 +68,12 @@ public class GenreServiceImpl implements IGenreService {
     private GenreResponseDTO toResponseDTO(Genre genre) {
         return new GenreResponseDTO(
                 genre.getGenreId(),
-                genre.getName()
+                genre.getName(),
+                genre.getDescription(),
+                genre.getPopularityScore(),
+                genre.getIsActive(),
+                genre.getCreatedAt(),
+                genre.getUpdatedAt()
         );
     }
 }
