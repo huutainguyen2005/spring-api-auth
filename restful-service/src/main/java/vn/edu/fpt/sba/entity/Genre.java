@@ -34,7 +34,7 @@ public class Genre {
     @ColumnDefault("50")
     BigDecimal popularityScore;
 
-    @Column(nullable = false)
+    @Column(name = "IsActive", nullable = false)
     Boolean isActive;
 
     @CreationTimestamp

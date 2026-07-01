@@ -1,18 +1,19 @@
 import { Button, Container, Pagination, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { getArtistList } from "../../api/artistApi.js";
+import { getAlbumList } from "../../api/albumApi.js";
 
-function ArtistTableRow({ artist, page }) {
+function AlbumTableRow({ album, page }) {
   return (
     <tr>
-      <td>{artist.artistId}</td>
-      <td>{artist.name}</td>
+      <td>{album.albumId}</td>
+      <td>{album.title}</td>
+      <td>{album.artist?.name || "Unknown"}</td>
       <td>
         <Button
           size="sm"
           as={Link}
-          to={`/chinh-sua-nghe-si/${artist.artistId}?page=${page}`}
+          to={`/chinh-sua-album/${album.albumId}?page=${page}`}
         >
           Edit
         </Button>{" "}
@@ -20,7 +21,7 @@ function ArtistTableRow({ artist, page }) {
           variant="danger"
           size="sm"
           as={Link}
-          to={`/xoa-nghe-si/${artist.artistId}?page=${page}`}
+          to={`/xoa-album/${album.albumId}?page=${page}`}
         >
           Delete
         </Button>
@@ -29,24 +30,26 @@ function ArtistTableRow({ artist, page }) {
   );
 }
 
-function ArtistTable({ list, page }) {
+function AlbumTable({ list, page }) {
   return (
     <Table>
       <thead>
         <tr>
           <th style={{ width: "10%" }}>ID</th>
-          <th style={{ width: "70%" }}>Name</th>
+          <th style={{ width: "50%" }}>Title</th>
+          <th style={{ width: "20%" }}>Artist</th>
           <th style={{ width: "20%" }}>Actions</th>
         </tr>
       </thead>
+
       <tbody>
         {list.length > 0 ? (
-          list.map((artist) => (
-            <ArtistTableRow key={artist.artistId} artist={artist} page={page} />
+          list.map((album) => (
+            <AlbumTableRow key={album.albumId} album={album} page={page} />
           ))
         ) : (
           <tr>
-            <td colSpan={3}>No artists found</td>
+            <td colSpan={4}>No albums found</td>
           </tr>
         )}
       </tbody>
@@ -54,8 +57,8 @@ function ArtistTable({ list, page }) {
   );
 }
 
-export function ArtistList() {
-  const [artists, setArtists] = useState([]);
+export function AlbumList() {
+  const [albums, setAlbums] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
   const [searchParams] = useSearchParams();
@@ -65,8 +68,8 @@ export function ArtistList() {
   const size = 10;
 
   useEffect(() => {
-    getArtistList(page, size).then((resp) => {
-      setArtists(resp.data.content);
+    getAlbumList(page, size).then((resp) => {
+      setAlbums(resp.data.content);
       setTotalPages(resp.data.totalPages);
     });
   }, [page, size]);
@@ -82,7 +85,7 @@ export function ArtistList() {
         <Pagination.Item
           key={i}
           active={i === page}
-          onClick={() => navigate(`/danh-sach-nghe-si?page=${i}`)}
+          onClick={() => navigate(`/danh-sach-album?page=${i}`)}
         >
           {i}
         </Pagination.Item>,
@@ -94,33 +97,33 @@ export function ArtistList() {
 
   return (
     <Container>
-      <h1 className="mt-4">Artist list</h1>
+      <h1 className="mt-4">Album list</h1>
 
       <div className="text-end mb-3">
         <Button
           size="sm"
           as={Link}
           variant="success"
-          to={`/them-moi-nghe-si?page=${page}`}
+          to={`/them-moi-album?page=${page}`}
         >
           Add
         </Button>
       </div>
 
-      <ArtistTable list={artists} page={page} />
+      <AlbumTable list={albums} page={page} />
 
       <div className="d-flex justify-content-center">
         <Pagination>
           <Pagination.Prev
             disabled={page === 1}
-            onClick={() => navigate(`/danh-sach-nghe-si?page=${page - 1}`)}
+            onClick={() => navigate(`/danh-sach-album?page=${page - 1}`)}
           />
 
           {renderPaginationItems()}
 
           <Pagination.Next
             disabled={page === totalPages}
-            onClick={() => navigate(`/danh-sach-nghe-si?page=${page + 1}`)}
+            onClick={() => navigate(`/danh-sach-album?page=${page + 1}`)}
           />
         </Pagination>
       </div>

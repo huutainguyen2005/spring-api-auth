@@ -1,39 +1,23 @@
-import {httpClient} from "./httpClient.js";
+import { httpClient } from "./httpClient";
 
-export async function getList(page = 1, size = 10) {
-    // axios get
-    const resp = await httpClient.get(`/artists`, {
-        params: {page, size}
-    });
-
-    // return response
-    return resp;
+export async function getArtistList(page = 1, size = 10) {
+  return await httpClient.get("/artists", {
+    params: { page, size },
+  });
 }
 
-// 1. GET
-const getResource = async () => {
-    // Tương đương với: /api/v1/artists?page=1&size=10
-    const resp = await httpClient.get('/artists', {
-        params: { page: 1, size: 10 }
-    });
-    console.log(resp.data);
-};
+export async function getArtist(artistId) {
+  return await httpClient.get(`/artists/${artistId}`);
+}
 
-// 2. POST
-const createResource = async (newArtistData) => {
-    // Truyền trực tiếp Object, không cần JSON.stringify
-    const resp = await httpClient.post('/artists', newArtistData);
-    console.log(resp.data);
-};
+export async function createArtist(data) {
+  return await httpClient.post("/artists", data);
+}
 
-// 3. PUT
-const updateResource = async (id, updatedData) => {
-    const resp = await httpClient.put(`/artists/${id}`, updatedData);
-    console.log(resp.data);
-};
+export async function updateArtist(artistId, data) {
+  return await httpClient.put(`/artists/${artistId}`, data);
+}
 
-// 4. DELETE
-const deleteResource = async (id) => {
-    const resp = await httpClient.delete(`/artists/${id}`);
-    console.log("Deleted");
-};
+export async function deleteArtist(artistId) {
+  return await httpClient.delete(`/artists/${artistId}`);
+}

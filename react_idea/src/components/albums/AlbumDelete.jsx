@@ -8,35 +8,35 @@ import {
 } from "react-bootstrap";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { deleteArtist, getArtistList, getArtist } from "../../api/artistApi";
+import { deleteAlbum, getAlbumList, getAlbum } from "../../api/albumApi";
 
-function ArtistDeletePage({ children }) {
+function AlbumDeletePage({ children }) {
   return (
     <Container>
-      <h1>Delete artist</h1>
+      <h1>Delete album</h1>
       {children}
     </Container>
   );
 }
 
-export function ArtistDelete() {
-  const [artist, setArtist] = useState({});
+export function AlbumDelete() {
+  const [album, setAlbum] = useState({});
   const [error, setError] = useState(null);
   const [notFound, setNotFound] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const { artistId } = useParams();
+  const { albumId } = useParams();
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
   const page = searchParams.get("page") || 1;
 
   useEffect(() => {
-    getArtist(artistId)
+    getAlbum(albumId)
       .then((res) => {
-        setArtist(res.data);
+        setAlbum(res.data);
         setNotFound(false);
       })
       .catch((err) => {
@@ -45,15 +45,15 @@ export function ArtistDelete() {
         }
         setError(err.message);
       });
-  }, [artistId]);
+  }, [albumId]);
 
   const confirmDelete = async () => {
     setDeleting(true);
 
     try {
-      await deleteArtist(artistId);
+      await deleteAlbum(albumId);
 
-      const resp = await getArtistList(page, 10);
+      const resp = await getAlbumList(page, 10);
 
       const newPage = Math.max(
         1,
@@ -61,7 +61,7 @@ export function ArtistDelete() {
       );
 
       setShowModal(false);
-      navigate(`/danh-sach-nghe-si?page=${newPage}`);
+      navigate(`/danh-sach-album?page=${newPage}`);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -72,30 +72,35 @@ export function ArtistDelete() {
 
   if (notFound) {
     return (
-      <ArtistDeletePage>
-        <Alert variant="danger">Artist with ID {artistId} not found.</Alert>
+      <AlbumDeletePage>
+        <Alert variant="danger">Album with ID {albumId} not found.</Alert>
 
         <Button
           variant="outline-secondary"
-          onClick={() => navigate(`/danh-sach-nghe-si?page=${page}`)}
+          onClick={() => navigate(`/danh-sach-album?page=${page}`)}
         >
           Back to List
         </Button>
-      </ArtistDeletePage>
+      </AlbumDeletePage>
     );
   }
 
   return (
-    <ArtistDeletePage>
+    <AlbumDeletePage>
       <Form>
-        <Form.Label>Artist ID</Form.Label>
+        <Form.Label>Album ID</Form.Label>
         <InputGroup className="mb-3">
-          <Form.Control value={artist.artistId ?? ""} readOnly />
+          <Form.Control value={album.albumId ?? ""} readOnly />
         </InputGroup>
 
-        <Form.Label>Artist Name</Form.Label>
+        <Form.Label>Album Title</Form.Label>
         <InputGroup className="mb-3">
-          <Form.Control value={artist.name ?? ""} readOnly />
+          <Form.Control value={album.title ?? ""} readOnly />
+        </InputGroup>
+
+        <Form.Label>Artist</Form.Label>
+        <InputGroup className="mb-3">
+          <Form.Control value={album.artist?.name ?? ""} readOnly />
         </InputGroup>
 
         {!!error && <Alert variant="danger">{error}</Alert>}
@@ -110,7 +115,7 @@ export function ArtistDelete() {
 
         <Button
           variant="outline-secondary"
-          onClick={() => navigate(`/danh-sach-nghe-si?page=${page}`)}
+          onClick={() => navigate(`/danh-sach-album?page=${page}`)}
         >
           Back to List
         </Button>
@@ -118,12 +123,12 @@ export function ArtistDelete() {
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Delete Artist</Modal.Title>
+          <Modal.Title>Delete Album</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
-          Are you sure you want to delete artist <strong>{artist.name}</strong>{" "}
-          with ID <strong>{artist.artistId}</strong>?
+          Are you sure you want to delete album <strong>{album.title}</strong>{" "}
+          with ID <strong>{album.albumId}</strong>?
         </Modal.Body>
 
         <Modal.Footer>
@@ -140,6 +145,6 @@ export function ArtistDelete() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </ArtistDeletePage>
+    </AlbumDeletePage>
   );
 }
